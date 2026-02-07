@@ -104,6 +104,14 @@
             background-color: #bd2130;
         }
         
+        .btn-calculate {
+            background-color: #17a2b8;
+        }
+        
+        .btn-calculate:hover {
+            background-color: #138496;
+        }
+        
         .form-section {
             margin-bottom: 30px;
         }
@@ -176,6 +184,17 @@
         .section-title {
             background-color: #e8f0fe;
             font-weight: bold;
+        }
+        
+        .percentage-badge {
+            display: inline-block;
+            background-color: #e9f7fe;
+            color: #2c5aa0;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            font-weight: 600;
         }
         
         .note {
@@ -385,6 +404,46 @@
             border-color: #2c5aa0;
         }
         
+        .distribution-summary {
+            background-color: #f8f9fa;
+            border: 2px solid #2c5aa0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-item {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 12px;
+        }
+        
+        .summary-item h5 {
+            color: #2c5aa0;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .summary-value {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .summary-percentage {
+            color: #28a745;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -418,6 +477,10 @@
             
             .quick-example {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -463,6 +526,9 @@
         <div class="controls">
             <button class="btn" id="isi-contoh-btn">
                 <i class="fas fa-magic"></i> Isi Data Contoh
+            </button>
+            <button class="btn btn-calculate" id="calculate-shu-btn">
+                <i class="fas fa-calculator"></i> Hitung Otomatis SHU
             </button>
             <button class="btn btn-clear" id="clear-btn">
                 <i class="fas fa-broom"></i> Hapus Data
@@ -605,57 +671,84 @@
                 </tr>
                 <tr>
                     <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="cadangan-koperasi">
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-modal">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        1. Cadangan Koperasi (min. 25%)
+                        1. Dana Modal/Simpanan
+                        <span class="percentage-badge">40%</span>
                     </td>
-                    <td><input type="number" id="cadangan-koperasi" placeholder="0" value="0"></td>
+                    <td><input type="number" id="dana-modal" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="poin-belanja">
+                            <i class="fas fa-info-circle"></i>
+                        2. Poin Belanja
+                        <span class="percentage-badge">5%</span>
+                    </td>
+                    <td><input type="number" id="poin-belanja" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="cadangan">
+                            <i class="fas fa-info-circle"></i>
+                        3. Cadangan
+                        <span class="percentage-badge">20%</span>
+                    </td>
+                    <td><input type="number" id="cadangan" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
                     <td>
                         <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pengurus">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        2. Dana Pengurus (maks. 10%)
+                        4. Dana Pengurus
+                        <span class="percentage-badge">7%</span>
                     </td>
                     <td><input type="number" id="dana-pengurus" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
                     <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pengawas">
+                            <i class="fas fa-info-circle"></i>
+                        5. Dana Pengawas
+                        <span class="percentage-badge">5%</span>
+                    </td>
+                    <td><input type="number" id="dana-pengawas" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>
                         <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-karyawan">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        3. Dana Karyawan (maks. 10%)
+                        6. Dana Karyawan
+                        <span class="percentage-badge">5%</span>
                     </td>
                     <td><input type="number" id="dana-karyawan" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pendidikan">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        4. Dana Pendidikan (maks. 10%)
-                    </td>
-                    <td><input type="number" id="dana-pendidikan" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
                         <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-sosial">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        5. Dana Sosial (maks. 10%)
+                        7. Dana Sosial
+                        <span class="percentage-badge">5%</span>
                     </td>
                     <td><input type="number" id="dana-sosial" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-anggota">
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pendidikan">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        6. Dana Pembagian kepada Anggota (sisa)
+                        8. Dana Pendidikan
+                        <span class="percentage-badge">3%</span>
                     </td>
-                    <td><input type="number" id="dana-anggota" placeholder="0" value="0"></td>
+                    <td><input type="number" id="dana-pendidikan" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pembangunan">
+                            <i class="fas fa-info-circle"></i>
+                        9. Dana Pembangunan
+                        <span class="percentage-badge">10%</span>
+                    </td>
+                    <td><input type="number" id="dana-pembangunan" placeholder="0" value="0"></td>
                 </tr>
                 <tr class="total-row">
                     <td><strong>TOTAL ALOKASI SHU</strong></td>
@@ -664,13 +757,22 @@
             </tbody>
         </table>
         
+        <!-- Ringkasan Distribusi -->
+        <div class="distribution-summary">
+            <h3><i class="fas fa-chart-pie"></i> Ringkasan Distribusi SHU</h3>
+            <div class="summary-grid" id="distributionSummary">
+                <!-- Ringkasan akan diisi oleh JavaScript -->
+            </div>
+        </div>
+        
         <div class="note">
             <h4><i class="fas fa-lightbulb"></i> Catatan Penting:</h4>
             <p>1. Klik ikon <i class="fas fa-info-circle" style="color: #2c5aa0;"></i> untuk informasi detail setiap item.</p>
             <p>2. Format ini sesuai dengan standar akuntansi koperasi Indonesia.</p>
-            <p>3. Pastikan total alokasi SHU sama dengan jumlah SHU yang dibagikan.</p>
-            <p>4. Cadangan koperasi minimal 25% dari SHU yang dibagikan sesuai dengan UU No. 25 Tahun 1992 tentang Perkoperasian.</p>
-            <p>5. Laporan ini harus ditandatangani oleh pengurus dan pengawas koperasi.</p>
+            <p>3. Total alokasi SHU harus sama dengan jumlah SHU yang dibagikan.</p>
+            <p>4. Persentase alokasi SHU sesuai dengan AD/ART koperasi yang berlaku.</p>
+            <p>5. Gunakan tombol "Hitung Otomatis SHU" untuk menghitung alokasi berdasarkan persentase.</p>
+            <p>6. Laporan ini harus ditandatangani oleh pengurus dan pengawas koperasi.</p>
         </div>
         
         <footer>
@@ -679,6 +781,22 @@
     </div>
 
     <script>
+        // Data persentase alokasi SHU
+        const shuPercentages = {
+            'dana-modal': 40,      // Dana Modal/Simpanan
+            'poin-belanja': 5,     // Poin Belanja
+            'cadangan': 20,         // Cadangan
+            'dana-pengurus': 7,    // Dana Pengurus
+            'dana-pengawas': 5,    // Dana Pengawas
+            'dana-karyawan': 5,    // Dana Karyawan
+            'dana-sosial': 5,      // Dana Sosial
+            'dana-pendidikan': 3,  // Dana Pendidikan
+            'dana-pembangunan': 10 // Dana Pembangunan
+        };
+        
+        // Total persentase (harus 100%)
+        const totalPercentage = Object.values(shuPercentages).reduce((a, b) => a + b, 0);
+        
         // Data informasi untuk setiap item
         const infoData = {
             'pendapatan-anggota': {
@@ -926,32 +1044,76 @@
                 regulation: 'UU No. 25 Tahun 1992 tentang Perkoperasian',
                 exampleNumbers: [3000000, 7500000, 15000000, 22500000]
             },
-            'cadangan-koperasi': {
-                title: 'Cadangan Koperasi',
+            'dana-modal': {
+                title: 'Dana Modal/Simpanan',
                 category: 'shu',
-                definition: 'Bagian dari SHU yang disisihkan untuk penguatan modal koperasi (minimal 25%).',
+                definition: 'Bagian dari SHU yang dialokasikan untuk memperkuat modal koperasi dan simpanan anggota.',
                 examples: [
-                    'Cadangan modal',
-                    'Cadangan ekspansi usaha',
-                    'Cadangan risiko'
+                    'Tambahan modal koperasi',
+                    'Peningkatan simpanan pokok/wajib',
+                    'Penguatan modal kerja'
                 ],
                 sources: [
                     'Keputusan RAT tentang alokasi SHU',
-                    'Perhitungan sesuai persentase'
+                    'Perhitungan sesuai persentase 40%'
                 ],
                 tips: [
-                    'Minimal 25% dari SHU yang dibagikan',
-                    'Dapat digunakan untuk modal kerja',
+                    'Persentase terbesar (40%)',
+                    'Digunakan untuk pengembangan usaha',
+                    'Dapat meningkatkan kapasitas koperasi',
+                    'Dicatat sebagai tambahan modal'
+                ],
+                regulation: 'AD/ART Koperasi dan UU No. 25/1992',
+                exampleNumbers: [2000000, 4000000, 8000000, 12000000]
+            },
+            'poin-belanja': {
+                title: 'Poin Belanja',
+                category: 'shu',
+                definition: 'Bagian dari SHU yang dialokasikan sebagai reward/poin untuk anggota yang berbelanja di koperasi.',
+                examples: [
+                    'Poin loyalitas anggota',
+                    'Cashback belanja',
+                    'Reward program'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase 5%'
+                ],
+                tips: [
+                    'Meningkatkan loyalitas anggota',
+                    'Berdasarkan transaksi belanja',
+                    'Dapat ditukar dengan barang atau potongan',
+                    'Transparan dalam perhitungan poin'
+                ],
+                regulation: 'AD/ART Koperasi',
+                exampleNumbers: [250000, 500000, 1000000, 1500000]
+            },
+            'cadangan': {
+                title: 'Cadangan',
+                category: 'shu',
+                definition: 'Bagian dari SHU yang disisihkan untuk cadangan koperasi.',
+                examples: [
+                    'Cadangan risiko usaha',
+                    'Cadangan ekspansi',
+                    'Cadangan tidak terduga'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase 20%'
+                ],
+                tips: [
+                    'Minimal sesuai ketentuan AD/ART',
+                    'Digunakan untuk antisipasi risiko',
                     'Tidak boleh dibagikan kepada anggota',
                     'Dicatat di ekuitas koperasi'
                 ],
                 regulation: 'UU No. 25 Tahun 1992 Pasal 55',
-                exampleNumbers: [1000000, 2500000, 5000000, 7500000]
+                exampleNumbers: [1000000, 2000000, 4000000, 6000000]
             },
             'dana-pengurus': {
                 title: 'Dana Pengurus',
                 category: 'shu',
-                definition: 'Bagian dari SHU untuk honorarium/imbalan pengurus koperasi (maksimal 10%).',
+                definition: 'Bagian dari SHU untuk honorarium/imbalan pengurus koperasi.',
                 examples: [
                     'Honorarium pengurus',
                     'Insentif kinerja pengurus',
@@ -959,21 +1121,43 @@
                 ],
                 sources: [
                     'Keputusan RAT tentang alokasi SHU',
-                    'Perhitungan sesuai persentase'
+                    'Perhitungan sesuai persentase 7%'
                 ],
                 tips: [
-                    'Maksimal 10% dari SHU yang dibagikan',
                     'Proporsional dengan kinerja',
                     'Transparan dalam penentuan besaran',
-                    'Dibayarkan setelah disetujui RAT'
+                    'Dibayarkan setelah disetujui RAT',
+                    'Pertimbangkan beban kerja'
                 ],
                 regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
-                exampleNumbers: [300000, 750000, 1500000, 2250000]
+                exampleNumbers: [350000, 700000, 1400000, 2100000]
+            },
+            'dana-pengawas': {
+                title: 'Dana Pengawas',
+                category: 'shu',
+                definition: 'Bagian dari SHU untuk honorarium/imbalan pengawas koperasi.',
+                examples: [
+                    'Honorarium pengawas',
+                    'Insentif pengawasan',
+                    'Tunjangan pengawas'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase 5%'
+                ],
+                tips: [
+                    'Proporsional dengan tugas pengawasan',
+                    'Transparan dalam penentuan besaran',
+                    'Dibayarkan setelah disetujui RAT',
+                    'Pertimbangkan kompleksitas pengawasan'
+                ],
+                regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
+                exampleNumbers: [250000, 500000, 1000000, 1500000]
             },
             'dana-karyawan': {
                 title: 'Dana Karyawan',
                 category: 'shu',
-                definition: 'Bagian dari SHU untuk bonus/imbalan karyawan koperasi (maksimal 10%).',
+                definition: 'Bagian dari SHU untuk bonus/imbalan karyawan koperasi.',
                 examples: [
                     'Bonus karyawan',
                     'Insentif kinerja',
@@ -981,44 +1165,21 @@
                 ],
                 sources: [
                     'Keputusan RAT tentang alokasi SHU',
-                    'Perhitungan sesuai persentase'
+                    'Perhitungan sesuai persentase 5%'
                 ],
                 tips: [
-                    'Maksimal 10% dari SHU yang dibagikan',
                     'Sesuaikan dengan kontribusi karyawan',
                     'Transparan dalam penentuan besaran',
-                    'Dibayarkan setelah disetujui RAT'
+                    'Dibayarkan setelah disetujui RAT',
+                    'Pertimbangkan masa kerja dan kinerja'
                 ],
                 regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
-                exampleNumbers: [300000, 750000, 1500000, 2250000]
-            },
-            'dana-pendidikan': {
-                title: 'Dana Pendidikan',
-                category: 'shu',
-                definition: 'Bagian dari SHU untuk kegiatan pendidikan dan pelatihan (maksimal 10%).',
-                examples: [
-                    'Pelatihan anggota',
-                    'Pendidikan pengurus dan karyawan',
-                    'Program literasi keuangan',
-                    'Seminar dan workshop'
-                ],
-                sources: [
-                    'Keputusan RAT tentang alokasi SHU',
-                    'Perhitungan sesuai persentase'
-                ],
-                tips: [
-                    'Maksimal 10% dari SHU yang dibagikan',
-                    'Fokus pada peningkatan kapasitas',
-                    'Rencanakan program yang bermanfaat',
-                    'Evaluasi hasil pendidikan'
-                ],
-                regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
-                exampleNumbers: [300000, 750000, 1500000, 2250000]
+                exampleNumbers: [250000, 500000, 1000000, 1500000]
             },
             'dana-sosial': {
                 title: 'Dana Sosial',
                 category: 'shu',
-                definition: 'Bagian dari SHU untuk kegiatan sosial kemasyarakatan (maksimal 10%).',
+                definition: 'Bagian dari SHU untuk kegiatan sosial kemasyarakatan.',
                 examples: [
                     'Bantuan sosial anggota',
                     'Program masyarakat sekitar',
@@ -1027,39 +1188,62 @@
                 ],
                 sources: [
                     'Keputusan RAT tentang alokasi SHU',
-                    'Perhitungan sesuai persentase'
+                    'Perhitungan sesuai persentase 5%'
                 ],
                 tips: [
-                    'Maksimal 10% dari SHU yang dibagikan',
                     'Sesuaikan dengan kemampuan koperasi',
                     'Fokus pada anggota dan masyarakat sekitar',
-                    'Transparan dalam penyaluran'
+                    'Transparan dalam penyaluran',
+                    'Dokumentasi kegiatan sosial'
                 ],
                 regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
-                exampleNumbers: [300000, 750000, 1500000, 2250000]
+                exampleNumbers: [250000, 500000, 1000000, 1500000]
             },
-            'dana-anggota': {
-                title: 'Dana Pembagian kepada Anggota',
+            'dana-pendidikan': {
+                title: 'Dana Pendidikan',
                 category: 'shu',
-                definition: 'Bagian dari SHU yang dibagikan kepada anggota sesuai partisipasinya (sisa setelah alokasi lain).',
+                definition: 'Bagian dari SHU untuk kegiatan pendidikan dan pelatihan.',
                 examples: [
-                    'Dibagikan berdasarkan jasa usaha',
-                    'Dibagikan berdasarkan simpanan',
-                    'Kombinasi jasa usaha dan simpanan'
+                    'Pelatihan anggota',
+                    'Pendidikan pengurus dan karyawan',
+                    'Program literasi keuangan',
+                    'Seminar dan workshop'
                 ],
                 sources: [
                     'Keputusan RAT tentang alokasi SHU',
-                    'Perhitungan sisa setelah alokasi lain',
-                    'Data transaksi anggota'
+                    'Perhitungan sesuai persentase 3%'
                 ],
                 tips: [
-                    'Hitung berdasarkan sistem yang ditetapkan AD/ART',
-                    'Proporsional dengan partisipasi anggota',
-                    'Transparan dalam perhitungan',
-                    'Bayarkan tepat waktu'
+                    'Fokus pada peningkatan kapasitas',
+                    'Rencanakan program yang bermanfaat',
+                    'Evaluasi hasil pendidikan',
+                    'Prioritaskan kebutuhan anggota'
                 ],
-                regulation: 'UU No. 25 Tahun 1992 tentang Perkoperasian',
-                exampleNumbers: [1500000, 3750000, 7500000, 11250000]
+                regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
+                exampleNumbers: [150000, 300000, 600000, 900000]
+            },
+            'dana-pembangunan': {
+                title: 'Dana Pembangunan',
+                category: 'shu',
+                definition: 'Bagian dari SHU untuk pembangunan dan pengembangan sarana prasarana koperasi.',
+                examples: [
+                    'Renovasi gedung',
+                    'Pembelian peralatan baru',
+                    'Pengembangan sistem',
+                    'Infrastruktur koperasi'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase 10%'
+                ],
+                tips: [
+                    'Untuk investasi jangka panjang',
+                    'Sesuaikan dengan rencana pengembangan',
+                    'Prioritaskan kebutuhan mendesak',
+                    'Monitor penggunaan dana'
+                ],
+                regulation: 'AD/ART Koperasi',
+                exampleNumbers: [500000, 1000000, 2000000, 3000000]
             }
         };
         
@@ -1078,13 +1262,6 @@
             
             const shuDibagikan = parseFloat(document.getElementById('shu-dibagikan').value) || 0;
             
-            const cadanganKoperasi = parseFloat(document.getElementById('cadangan-koperasi').value) || 0;
-            const danaPengurus = parseFloat(document.getElementById('dana-pengurus').value) || 0;
-            const danaKaryawan = parseFloat(document.getElementById('dana-karyawan').value) || 0;
-            const danaPendidikan = parseFloat(document.getElementById('dana-pendidikan').value) || 0;
-            const danaSosial = parseFloat(document.getElementById('dana-sosial').value) || 0;
-            const danaAnggota = parseFloat(document.getElementById('dana-anggota').value) || 0;
-            
             // Hitung total pendapatan
             const totalPendapatan = pendapatanAnggota + pendapatanOperasional + pendapatanNonOperasional + pendapatanLain;
             document.getElementById('total-pendapatan').textContent = formatRupiah(totalPendapatan);
@@ -1102,8 +1279,88 @@
             document.getElementById('laba-rugi-bersih').textContent = formatRupiah(labaRugiBersih);
             
             // Hitung total alokasi SHU
-            const totalAlokasiSHU = cadanganKoperasi + danaPengurus + danaKaryawan + danaPendidikan + danaSosial + danaAnggota;
+            const danaModal = parseFloat(document.getElementById('dana-modal').value) || 0;
+            const poinBelanja = parseFloat(document.getElementById('poin-belanja').value) || 0;
+            const cadangan = parseFloat(document.getElementById('cadangan').value) || 0;
+            const danaPengurus = parseFloat(document.getElementById('dana-pengurus').value) || 0;
+            const danaPengawas = parseFloat(document.getElementById('dana-pengawas').value) || 0;
+            const danaKaryawan = parseFloat(document.getElementById('dana-karyawan').value) || 0;
+            const danaSosial = parseFloat(document.getElementById('dana-sosial').value) || 0;
+            const danaPendidikan = parseFloat(document.getElementById('dana-pendidikan').value) || 0;
+            const danaPembangunan = parseFloat(document.getElementById('dana-pembangunan').value) || 0;
+            
+            const totalAlokasiSHU = danaModal + poinBelanja + cadangan + danaPengurus + danaPengawas + 
+                                   danaKaryawan + danaSosial + danaPendidikan + danaPembangunan;
             document.getElementById('total-alokasi-shu').textContent = formatRupiah(totalAlokasiSHU);
+            
+            // Update ringkasan distribusi
+            updateDistributionSummary(shuDibagikan);
+        }
+        
+        // Fungsi untuk menghitung alokasi SHU otomatis berdasarkan persentase
+        function hitungAlokasiSHU() {
+            const shuDibagikan = parseFloat(document.getElementById('shu-dibagikan').value) || 0;
+            
+            if (shuDibagikan <= 0) {
+                alert('Masukkan jumlah SHU yang dibagikan terlebih dahulu.');
+                return;
+            }
+            
+            // Hitung alokasi berdasarkan persentase
+            document.getElementById('dana-modal').value = Math.round(shuDibagikan * shuPercentages['dana-modal'] / 100);
+            document.getElementById('poin-belanja').value = Math.round(shuDibagikan * shuPercentages['poin-belanja'] / 100);
+            document.getElementById('cadangan').value = Math.round(shuDibagikan * shuPercentages['cadangan'] / 100);
+            document.getElementById('dana-pengurus').value = Math.round(shuDibagikan * shuPercentages['dana-pengurus'] / 100);
+            document.getElementById('dana-pengawas').value = Math.round(shuDibagikan * shuPercentages['dana-pengawas'] / 100);
+            document.getElementById('dana-karyawan').value = Math.round(shuDibagikan * shuPercentages['dana-karyawan'] / 100);
+            document.getElementById('dana-sosial').value = Math.round(shuDibagikan * shuPercentages['dana-sosial'] / 100);
+            document.getElementById('dana-pendidikan').value = Math.round(shuDibagikan * shuPercentages['dana-pendidikan'] / 100);
+            document.getElementById('dana-pembangunan').value = Math.round(shuDibagikan * shuPercentages['dana-pembangunan'] / 100);
+            
+            // Hitung ulang total
+            hitungTotal();
+            
+            alert('Alokasi SHU telah dihitung otomatis berdasarkan persentase.');
+        }
+        
+        // Update ringkasan distribusi SHU
+        function updateDistributionSummary(shuTotal) {
+            const summaryContainer = document.getElementById('distributionSummary');
+            
+            if (shuTotal <= 0) {
+                summaryContainer.innerHTML = '<p style="color: #666; text-align: center;">Masukkan SHU yang dibagikan untuk melihat ringkasan distribusi</p>';
+                return;
+            }
+            
+            let summaryHTML = '';
+            let totalCalculated = 0;
+            
+            for (const [id, percentage] of Object.entries(shuPercentages)) {
+                const amount = parseFloat(document.getElementById(id).value) || 0;
+                const calculatedAmount = Math.round(shuTotal * percentage / 100);
+                const actualPercentage = shuTotal > 0 ? Math.round((amount / shuTotal) * 100) : 0;
+                
+                summaryHTML += `
+                    <div class="summary-item">
+                        <h5>${infoData[id].title}</h5>
+                        <div class="summary-value">Rp ${formatRupiah(amount)}</div>
+                        <div class="summary-percentage">${actualPercentage}% (target: ${percentage}%)</div>
+                    </div>
+                `;
+                
+                totalCalculated += amount;
+            }
+            
+            // Tambahkan total
+            summaryHTML += `
+                <div class="summary-item" style="background-color: #e8f0fe; border: 2px solid #2c5aa0;">
+                    <h5>TOTAL ALOKASI SHU</h5>
+                    <div class="summary-value">Rp ${formatRupiah(totalCalculated)}</div>
+                    <div class="summary-percentage">${shuTotal > 0 ? Math.round((totalCalculated / shuTotal) * 100) : 0}% dari SHU</div>
+                </div>
+            `;
+            
+            summaryContainer.innerHTML = summaryHTML;
         }
         
         // Format angka menjadi format Rupiah
@@ -1248,19 +1505,14 @@
             // SHU yang dibagikan
             document.getElementById('shu-dibagikan').value = '18000000';
             
-            // Alokasi SHU
-            document.getElementById('cadangan-koperasi').value = '4500000'; // 25%
-            document.getElementById('dana-pengurus').value = '1800000'; // 10%
-            document.getElementById('dana-karyawan').value = '1800000'; // 10%
-            document.getElementById('dana-pendidikan').value = '1800000'; // 10%
-            document.getElementById('dana-sosial').value = '1800000'; // 10%
-            document.getElementById('dana-anggota').value = '6300000'; // Sisa (35%)
+            // Hitung alokasi SHU otomatis
+            hitungAlokasiSHU();
             
-            // Hitung ulang total
-            hitungTotal();
-            
-            alert('Data contoh telah dimasukkan. Anda dapat mengubah data sesuai kebutuhan.');
+            alert('Data contoh telah dimasukkan. Alokasi SHU telah dihitung otomatis.');
         });
+        
+        // Fungsi untuk menghitung SHU otomatis
+        document.getElementById('calculate-shu-btn').addEventListener('click', hitungAlokasiSHU);
         
         // Fungsi untuk menghapus data
         document.getElementById('clear-btn').addEventListener('click', function() {
@@ -1280,6 +1532,9 @@
                 allTotals.forEach(span => {
                     span.textContent = '0';
                 });
+                
+                // Reset ringkasan
+                document.getElementById('distributionSummary').innerHTML = '<p style="color: #666; text-align: center;">Masukkan SHU yang dibagikan untuk melihat ringkasan distribusi</p>';
                 
                 alert('Semua data telah dihapus.');
             }
@@ -1319,17 +1574,20 @@
                 ["  LABA/RUGI BERSIH", document.getElementById('laba-rugi-bersih').textContent.replace(/\./g, '')],
                 [],
                 ["D. ALOKASI SISA HASIL USAHA (SHU)", ""],
-                ["  1. Cadangan Koperasi (min. 25%)", parseFloat(document.getElementById('cadangan-koperasi').value) || 0],
-                ["  2. Dana Pengurus (maks. 10%)", parseFloat(document.getElementById('dana-pengurus').value) || 0],
-                ["  3. Dana Karyawan (maks. 10%)", parseFloat(document.getElementById('dana-karyawan').value) || 0],
-                ["  4. Dana Pendidikan (maks. 10%)", parseFloat(document.getElementById('dana-pendidikan').value) || 0],
-                ["  5. Dana Sosial (maks. 10%)", parseFloat(document.getElementById('dana-sosial').value) || 0],
-                ["  6. Dana Pembagian kepada Anggota (sisa)", parseFloat(document.getElementById('dana-anggota').value) || 0],
+                ["  1. Dana Modal/Simpanan (40%)", parseFloat(document.getElementById('dana-modal').value) || 0],
+                ["  2. Poin Belanja (5%)", parseFloat(document.getElementById('poin-belanja').value) || 0],
+                ["  3. Cadangan (20%)", parseFloat(document.getElementById('cadangan').value) || 0],
+                ["  4. Dana Pengurus (7%)", parseFloat(document.getElementById('dana-pengurus').value) || 0],
+                ["  5. Dana Pengawas (5%)", parseFloat(document.getElementById('dana-pengawas').value) || 0],
+                ["  6. Dana Karyawan (5%)", parseFloat(document.getElementById('dana-karyawan').value) || 0],
+                ["  7. Dana Sosial (5%)", parseFloat(document.getElementById('dana-sosial').value) || 0],
+                ["  8. Dana Pendidikan (3%)", parseFloat(document.getElementById('dana-pendidikan').value) || 0],
+                ["  9. Dana Pembangunan (10%)", parseFloat(document.getElementById('dana-pembangunan').value) || 0],
                 ["  TOTAL ALOKASI SHU", document.getElementById('total-alokasi-shu').textContent.replace(/\./g, '')],
                 [],
                 ["Catatan:", ""],
                 ["1. Format sesuai standar akuntansi koperasi Indonesia", ""],
-                ["2. Cadangan koperasi minimal 25% dari SHU yang dibagikan", ""],
+                ["2. Alokasi SHU sesuai dengan AD/ART Koperasi", ""],
                 ["3. Laporan harus ditandatangani oleh pengurus dan pengawas koperasi", ""],
                 ["", ""],
                 ["Disetujui oleh:", ""],
@@ -1338,6 +1596,11 @@
                 ["(__________________________)", ""],
                 ["", ""],
                 ["Ketua Pengawas", ""],
+                ["", ""],
+                ["(__________________________)", ""],
+                ["", ""],
+                ["Mengetahui:", ""],
+                ["Sekretaris", ""],
                 ["", ""],
                 ["(__________________________)", ""]
             ];
@@ -1399,7 +1662,11 @@
         });
         
         // Hitung total saat halaman pertama kali dimuat
-        document.addEventListener('DOMContentLoaded', hitungTotal);
+        document.addEventListener('DOMContentLoaded', function() {
+            hitungTotal();
+            // Tampilkan info persentase total
+            console.log(`Total persentase alokasi SHU: ${totalPercentage}%`);
+        });
     </script>
 </body>
 </html>
