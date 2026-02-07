@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Format Laporan Laba Rugi Koperasi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2c5aa0;
+        }
+        
+        h1 {
+            color: #2c5aa0;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        h2 {
+            color: #2c5aa0;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        h3 {
+            color: #3a6bc2;
+            margin: 20px 0 10px;
+        }
+        
+        .description {
+            color: #666;
+            font-size: 16px;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #1e4070;
+        }
+        
+        .btn-download {
+            background-color: #28a745;
+        }
+        
+        .btn-download:hover {
+            background-color: #1e7e34;
+        }
+        
+        .btn-clear {
+            background-color: #dc3545;
+        }
+        
+        .btn-clear:hover {
+            background-color: #bd2130;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #2c5aa0;
+            box-shadow: 0 0 0 2px rgba(44, 90, 160, 0.2);
+        }
+        
+        .financial-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .financial-table th {
+            background-color: #2c5aa0;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-weight: 600;
+        }
+        
+        .financial-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .financial-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .financial-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .financial-table tr:hover {
+            background-color: #f0f5ff;
+        }
+        
+        .total-row {
+            font-weight: bold;
+            background-color: #e8f0fe !important;
+        }
+        
+        .section-title {
+            background-color: #e8f0fe;
+            font-weight: bold;
+        }
+        
+        .note {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 30px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .note h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .financial-table {
+                font-size: 14px;
+            }
+            
+            .financial-table th,
+            .financial-table td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-hand-holding-usd"></i> FORMAT LAPORAN LABA RUGI KOPERASI</h1>
+            <p class="description">Format laporan keuangan tahunan koperasi sesuai dengan standar akuntansi koperasi Indonesia</p>
+        </header>
+        
+        <div class="form-section">
+            <h2><i class="fas fa-info-circle"></i> Informasi Koperasi</h2>
+            <div class="input-group">
+                <label for="nama-koperasi">Nama Koperasi</label>
+                <input type="text" id="nama-koperasi" placeholder="Contoh: Koperasi Sejahtera Mandiri">
+            </div>
+            <div class="input-group">
+                <label for="periode-laporan">Periode Laporan (Tahun)</label>
+                <input type="text" id="periode-laporan" placeholder="Contoh: 2023" value="2023">
+            </div>
+            <div class="input-group">
+                <label for="satuan-mata-uang">Satuan Mata Uang</label>
+                <input type="text" id="satuan-mata-uang" placeholder="Contoh: Rupiah (Rp)" value="Rupiah (Rp)">
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" id="isi-contoh-btn">
+                <i class="fas fa-magic"></i> Isi Data Contoh
+            </button>
+            <button class="btn btn-clear" id="clear-btn">
+                <i class="fas fa-broom"></i> Hapus Data
+            </button>
+            <button class="btn btn-download" id="download-btn">
+                <i class="fas fa-download"></i> Download Excel
+            </button>
+        </div>
+        
+        <h2><i class="fas fa-file-invoice-dollar"></i> Format Laporan Laba Rugi</h2>
+        
+        <table class="financial-table">
+            <thead>
+                <tr>
+                    <th width="70%">Uraian</th>
+                    <th width="30%">Jumlah (Rp)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Bagian Pendapatan -->
+                <tr class="section-title">
+                    <td colspan="2">A. PENDAPATAN</td>
+                </tr>
+                <tr>
+                    <td>1. Pendapatan dari Anggota</td>
+                    <td><input type="number" id="pendapatan-anggota" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>2. Pendapatan Operasional</td>
+                    <td><input type="number" id="pendapatan-operasional" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>3. Pendapatan Non-Operasional</td>
+                    <td><input type="number" id="pendapatan-non-operasional" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>4. Pendapatan Lain-lain</td>
+                    <td><input type="number" id="pendapatan-lain" placeholder="0" value="0"></td>
+                </tr>
+                <tr class="total-row">
+                    <td><strong>TOTAL PENDAPATAN</strong></td>
+                    <td><span id="total-pendapatan">0</span></td>
+                </tr>
+                
+                <!-- Bagian Beban -->
+                <tr class="section-title">
+                    <td colspan="2">B. BEBAN</td>
+                </tr>
+                <tr>
+                    <td>1. Beban Operasional</td>
+                    <td><input type="number" id="beban-operasional" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>2. Beban Administrasi dan Umum</td>
+                    <td><input type="number" id="beban-administrasi" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>3. Beban Penyusutan</td>
+                    <td><input type="number" id="beban-penyusutan" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>4. Beban Lain-lain</td>
+                    <td><input type="number" id="beban-lain" placeholder="0" value="0"></td>
+                </tr>
+                <tr class="total-row">
+                    <td><strong>TOTAL BEBAN</strong></td>
+                    <td><span id="total-beban">0</span></td>
+                </tr>
+                
+                <!-- Bagian Laba/Rugi -->
+                <tr class="section-title">
+                    <td colspan="2">C. LABA/RUGI SEBELUM SHU</td>
+                </tr>
+                <tr>
+                    <td>Laba/Rugi Sebelum SHU (Total Pendapatan - Total Beban)</td>
+                    <td><span id="laba-rugi-sebelum-shu">0</span></td>
+                </tr>
+                <tr>
+                    <td>Sisa Hasil Usaha (SHU) yang Dibagikan</td>
+                    <td><input type="number" id="shu-dibagikan" placeholder="0" value="0"></td>
+                </tr>
+                <tr class="total-row">
+                    <td><strong>LABA/RUGI BERSIH</strong></td>
+                    <td><span id="laba-rugi-bersih">0</span></td>
+                </tr>
+                
+                <!-- Bagian Alokasi SHU -->
+                <tr class="section-title">
+                    <td colspan="2">D. ALOKASI SISA HASIL USAHA (SHU)</td>
+                </tr>
+                <tr>
+                    <td>1. Cadangan Koperasi (min. 25%)</td>
+                    <td><input type="number" id="cadangan-koperasi" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>2. Dana Pengurus (maks. 10%)</td>
+                    <td><input type="number" id="dana-pengurus" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>3. Dana Karyawan (maks. 10%)</td>
+                    <td><input type="number" id="dana-karyawan" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>4. Dana Pendidikan (maks. 10%)</td>
+                    <td><input type="number" id="dana-pendidikan" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>5. Dana Sosial (maks. 10%)</td>
+                    <td><input type="number" id="dana-sosial" placeholder="0" value="0"></td>
+                </tr>
+                <tr>
+                    <td>6. Dana Pembagian kepada Anggota (sisa)</td>
+                    <td><input type="number" id="dana-anggota" placeholder="0" value="0"></td>
+                </tr>
+                <tr class="total-row">
+                    <td><strong>TOTAL ALOKASI SHU</strong></td>
+                    <td><span id="total-alokasi-shu">0</span></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="note">
+            <h4><i class="fas fa-lightbulb"></i> Catatan Penting:</h4>
+            <p>1. Format ini sesuai dengan standar akuntansi koperasi Indonesia.</p>
+            <p>2. Pastikan total alokasi SHU sama dengan jumlah SHU yang dibagikan.</p>
+            <p>3. Cadangan koperasi minimal 25% dari SHU yang dibagikan sesuai dengan UU No. 25 Tahun 1992 tentang Perkoperasian.</p>
+            <p>4. Laporan ini harus ditandatangani oleh pengurus dan pengawas koperasi.</p>
+        </div>
+        
+        <footer>
+            <p>Format Laporan Laba Rugi Koperasi &copy; 2023 - Standar Akuntansi Koperasi Indonesia</p>
+        </footer>
+    </div>
+
+    <script>
+        // Fungsi untuk menghitung total
+        function hitungTotal() {
+            // Ambil nilai dari input
+            const pendapatanAnggota = parseFloat(document.getElementById('pendapatan-anggota').value) || 0;
+            const pendapatanOperasional = parseFloat(document.getElementById('pendapatan-operasional').value) || 0;
+            const pendapatanNonOperasional = parseFloat(document.getElementById('pendapatan-non-operasional').value) || 0;
+            const pendapatanLain = parseFloat(document.getElementById('pendapatan-lain').value) || 0;
+            
+            const bebanOperasional = parseFloat(document.getElementById('beban-operasional').value) || 0;
+            const bebanAdministrasi = parseFloat(document.getElementById('beban-administrasi').value) || 0;
+            const bebanPenyusutan = parseFloat(document.getElementById('beban-penyusutan').value) || 0;
+            const bebanLain = parseFloat(document.getElementById('beban-lain').value) || 0;
+            
+            const shuDibagikan = parseFloat(document.getElementById('shu-dibagikan').value) || 0;
+            
+            const cadanganKoperasi = parseFloat(document.getElementById('cadangan-koperasi').value) || 0;
+            const danaPengurus = parseFloat(document.getElementById('dana-pengurus').value) || 0;
+            const danaKaryawan = parseFloat(document.getElementById('dana-karyawan').value) || 0;
+            const danaPendidikan = parseFloat(document.getElementById('dana-pendidikan').value) || 0;
+            const danaSosial = parseFloat(document.getElementById('dana-sosial').value) || 0;
+            const danaAnggota = parseFloat(document.getElementById('dana-anggota').value) || 0;
+            
+            // Hitung total pendapatan
+            const totalPendapatan = pendapatanAnggota + pendapatanOperasional + pendapatanNonOperasional + pendapatanLain;
+            document.getElementById('total-pendapatan').textContent = formatRupiah(totalPendapatan);
+            
+            // Hitung total beban
+            const totalBeban = bebanOperasional + bebanAdministrasi + bebanPenyusutan + bebanLain;
+            document.getElementById('total-beban').textContent = formatRupiah(totalBeban);
+            
+            // Hitung laba rugi sebelum SHU
+            const labaRugiSebelumSHU = totalPendapatan - totalBeban;
+            document.getElementById('laba-rugi-sebelum-shu').textContent = formatRupiah(labaRugiSebelumSHU);
+            
+            // Hitung laba rugi bersih
+            const labaRugiBersih = labaRugiSebelumSHU - shuDibagikan;
+            document.getElementById('laba-rugi-bersih').textContent = formatRupiah(labaRugiBersih);
+            
+            // Hitung total alokasi SHU
+            const totalAlokasiSHU = cadanganKoperasi + danaPengurus + danaKaryawan + danaPendidikan + danaSosial + danaAnggota;
+            document.getElementById('total-alokasi-shu').textContent = formatRupiah(totalAlokasiSHU);
+        }
+        
+        // Format angka menjadi format Rupiah
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(angka);
+        }
+        
+        // Fungsi untuk mengisi data contoh
+        document.getElementById('isi-contoh-btn').addEventListener('click', function() {
+            // Informasi koperasi
+            document.getElementById('nama-koperasi').value = 'Koperasi Sejahtera Mandiri';
+            document.getElementById('periode-laporan').value = '2023';
+            document.getElementById('satuan-mata-uang').value = 'Rupiah (Rp)';
+            
+            // Data pendapatan contoh
+            document.getElementById('pendapatan-anggota').value = '25000000';
+            document.getElementById('pendapatan-operasional').value = '15000000';
+            document.getElementById('pendapatan-non-operasional').value = '5000000';
+            document.getElementById('pendapatan-lain').value = '3000000';
+            
+            // Data beban contoh
+            document.getElementById('beban-operasional').value = '12000000';
+            document.getElementById('beban-administrasi').value = '8000000';
+            document.getElementById('beban-penyusutan').value = '3000000';
+            document.getElementById('beban-lain').value = '2000000';
+            
+            // SHU yang dibagikan
+            document.getElementById('shu-dibagikan').value = '18000000';
+            
+            // Alokasi SHU
+            document.getElementById('cadangan-koperasi').value = '4500000'; // 25%
+            document.getElementById('dana-pengurus').value = '1800000'; // 10%
+            document.getElementById('dana-karyawan').value = '1800000'; // 10%
+            document.getElementById('dana-pendidikan').value = '1800000'; // 10%
+            document.getElementById('dana-sosial').value = '1800000'; // 10%
+            document.getElementById('dana-anggota').value = '6300000'; // Sisa (35%)
+            
+            // Hitung ulang total
+            hitungTotal();
+            
+            alert('Data contoh telah dimasukkan. Anda dapat mengubah data sesuai kebutuhan.');
+        });
+        
+        // Fungsi untuk menghapus data
+        document.getElementById('clear-btn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin menghapus semua data?')) {
+                // Reset semua input
+                const allInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+                allInputs.forEach(input => {
+                    input.value = '';
+                });
+                
+                // Reset informasi koperasi ke default
+                document.getElementById('periode-laporan').value = '2023';
+                document.getElementById('satuan-mata-uang').value = 'Rupiah (Rp)';
+                
+                // Reset semua total
+                const allTotals = document.querySelectorAll('span[id^="total"], span[id^="laba"]');
+                allTotals.forEach(span => {
+                    span.textContent = '0';
+                });
+                
+                alert('Semua data telah dihapus.');
+            }
+        });
+        
+        // Fungsi untuk mendownload sebagai Excel
+        document.getElementById('download-btn').addEventListener('click', function() {
+            // Ambil data dari form
+            const namaKoperasi = document.getElementById('nama-koperasi').value || 'Koperasi';
+            const periodeLaporan = document.getElementById('periode-laporan').value || '2023';
+            const satuanMataUang = document.getElementById('satuan-mata-uang').value || 'Rupiah (Rp)';
+            
+            // Siapkan data untuk Excel
+            const data = [
+                [`LAPORAN LABA RUGI ${namaKoperasi.toUpperCase()}`],
+                [`Periode: Tahun ${periodeLaporan}`],
+                [`Satuan Mata Uang: ${satuanMataUang}`],
+                [],
+                ["Uraian", "Jumlah (Rp)"],
+                ["A. PENDAPATAN", ""],
+                ["  1. Pendapatan dari Anggota", parseFloat(document.getElementById('pendapatan-anggota').value) || 0],
+                ["  2. Pendapatan Operasional", parseFloat(document.getElementById('pendapatan-operasional').value) || 0],
+                ["  3. Pendapatan Non-Operasional", parseFloat(document.getElementById('pendapatan-non-operasional').value) || 0],
+                ["  4. Pendapatan Lain-lain", parseFloat(document.getElementById('pendapatan-lain').value) || 0],
+                ["  TOTAL PENDAPATAN", document.getElementById('total-pendapatan').textContent.replace(/\./g, '')],
+                [],
+                ["B. BEBAN", ""],
+                ["  1. Beban Operasional", parseFloat(document.getElementById('beban-operasional').value) || 0],
+                ["  2. Beban Administrasi dan Umum", parseFloat(document.getElementById('beban-administrasi').value) || 0],
+                ["  3. Beban Penyusutan", parseFloat(document.getElementById('beban-penyusutan').value) || 0],
+                ["  4. Beban Lain-lain", parseFloat(document.getElementById('beban-lain').value) || 0],
+                ["  TOTAL BEBAN", document.getElementById('total-beban').textContent.replace(/\./g, '')],
+                [],
+                ["C. LABA/RUGI SEBELUM SHU", ""],
+                ["  Laba/Rugi Sebelum SHU", document.getElementById('laba-rugi-sebelum-shu').textContent.replace(/\./g, '')],
+                ["  Sisa Hasil Usaha (SHU) yang Dibagikan", parseFloat(document.getElementById('shu-dibagikan').value) || 0],
+                ["  LABA/RUGI BERSIH", document.getElementById('laba-rugi-bersih').textContent.replace(/\./g, '')],
+                [],
+                ["D. ALOKASI SISA HASIL USAHA (SHU)", ""],
+                ["  1. Cadangan Koperasi (min. 25%)", parseFloat(document.getElementById('cadangan-koperasi').value) || 0],
+                ["  2. Dana Pengurus (maks. 10%)", parseFloat(document.getElementById('dana-pengurus').value) || 0],
+                ["  3. Dana Karyawan (maks. 10%)", parseFloat(document.getElementById('dana-karyawan').value) || 0],
+                ["  4. Dana Pendidikan (maks. 10%)", parseFloat(document.getElementById('dana-pendidikan').value) || 0],
+                ["  5. Dana Sosial (maks. 10%)", parseFloat(document.getElementById('dana-sosial').value) || 0],
+                ["  6. Dana Pembagian kepada Anggota (sisa)", parseFloat(document.getElementById('dana-anggota').value) || 0],
+                ["  TOTAL ALOKASI SHU", document.getElementById('total-alokasi-shu').textContent.replace(/\./g, '')],
+                [],
+                ["Catatan:", ""],
+                ["1. Format sesuai standar akuntansi koperasi Indonesia", ""],
+                ["2. Cadangan koperasi minimal 25% dari SHU yang dibagikan", ""],
+                ["3. Laporan harus ditandatangani oleh pengurus dan pengawas koperasi", ""]
+            ];
+            
+            // Buat worksheet
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            
+            // Atur lebar kolom
+            const wscols = [
+                {wch: 50}, // Kolom uraian
+                {wch: 20}  // Kolom jumlah
+            ];
+            ws['!cols'] = wscols;
+            
+            // Buat workbook
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Laba Rugi");
+            
+            // Generate nama file
+            const fileName = `Laporan Laba Rugi ${namaKoperasi} ${periodeLaporan}.xlsx`;
+            
+            // Download file
+            XLSX.writeFile(wb, fileName);
+            
+            alert(`File ${fileName} berhasil diunduh.`);
+        });
+        
+        // Tambahkan event listener untuk menghitung otomatis saat input berubah
+        const allInputs = document.querySelectorAll('input[type="number"]');
+        allInputs.forEach(input => {
+            input.addEventListener('input', hitungTotal);
+        });
+        
+        // Hitung total saat halaman pertama kali dimuat
+        document.addEventListener('DOMContentLoaded', hitungTotal);
+    </script>
+</body>
+</html>
