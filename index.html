@@ -110,6 +110,7 @@
         
         .input-group {
             margin-bottom: 15px;
+            position: relative;
         }
         
         label {
@@ -152,6 +153,7 @@
         .financial-table td {
             padding: 10px 15px;
             border-bottom: 1px solid #eee;
+            position: relative;
         }
         
         .financial-table tr:last-child td {
@@ -198,6 +200,191 @@
             border-top: 1px solid #eee;
         }
         
+        /* Styling untuk info icon */
+        .info-icon {
+            display: inline-block;
+            margin-left: 8px;
+            color: #2c5aa0;
+            cursor: help;
+            position: relative;
+        }
+        
+        .info-icon:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 10;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Modal popup */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            background-color: #2c5aa0;
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            color: white;
+            margin: 0;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .info-category {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .category-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .income-icon {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .expense-icon {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .shu-icon {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .info-item {
+            margin-bottom: 20px;
+        }
+        
+        .info-item h4 {
+            color: #2c5aa0;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-content {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #2c5aa0;
+        }
+        
+        .info-content ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .info-content li {
+            margin-bottom: 5px;
+        }
+        
+        .example-box {
+            background-color: #e9f7fe;
+            border: 1px dashed #2c5aa0;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .regulation-note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .quick-example {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .example-number {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .example-number:hover {
+            background-color: #f0f5ff;
+            border-color: #2c5aa0;
+        }
+        
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -224,12 +411,33 @@
             .financial-table td {
                 padding: 8px 10px;
             }
+            
+            .modal {
+                width: 95%;
+            }
+            
+            .quick-example {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+    <!-- Modal Popup Informasi -->
+    <div class="modal-overlay" id="infoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Informasi Detail</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Konten akan diisi oleh JavaScript -->
+            </div>
+        </div>
+    </div>
+    
     <div class="container">
         <header>
             <h1><i class="fas fa-hand-holding-usd"></i> FORMAT LAPORAN LABA RUGI KOPERASI</h1>
@@ -279,19 +487,39 @@
                     <td colspan="2">A. PENDAPATAN</td>
                 </tr>
                 <tr>
-                    <td>1. Pendapatan dari Anggota</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-anggota">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        1. Pendapatan dari Anggota
+                    </td>
                     <td><input type="number" id="pendapatan-anggota" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>2. Pendapatan Operasional</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-operasional">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        2. Pendapatan Operasional
+                    </td>
                     <td><input type="number" id="pendapatan-operasional" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>3. Pendapatan Non-Operasional</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-non-operasional">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        3. Pendapatan Non-Operasional
+                    </td>
                     <td><input type="number" id="pendapatan-non-operasional" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>4. Pendapatan Lain-lain</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-lain">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        4. Pendapatan Lain-lain
+                    </td>
                     <td><input type="number" id="pendapatan-lain" placeholder="0" value="0"></td>
                 </tr>
                 <tr class="total-row">
@@ -304,19 +532,39 @@
                     <td colspan="2">B. BEBAN</td>
                 </tr>
                 <tr>
-                    <td>1. Beban Operasional</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-operasional">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        1. Beban Operasional
+                    </td>
                     <td><input type="number" id="beban-operasional" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>2. Beban Administrasi dan Umum</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-administrasi">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        2. Beban Administrasi dan Umum
+                    </td>
                     <td><input type="number" id="beban-administrasi" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>3. Beban Penyusutan</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-penyusutan">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        3. Beban Penyusutan
+                    </td>
                     <td><input type="number" id="beban-penyusutan" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>4. Beban Lain-lain</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-lain">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        4. Beban Lain-lain
+                    </td>
                     <td><input type="number" id="beban-lain" placeholder="0" value="0"></td>
                 </tr>
                 <tr class="total-row">
@@ -329,11 +577,21 @@
                     <td colspan="2">C. LABA/RUGI SEBELUM SHU</td>
                 </tr>
                 <tr>
-                    <td>Laba/Rugi Sebelum SHU (Total Pendapatan - Total Beban)</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="laba-rugi-sebelum-shu">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        Laba/Rugi Sebelum SHU (Total Pendapatan - Total Beban)
+                    </td>
                     <td><span id="laba-rugi-sebelum-shu">0</span></td>
                 </tr>
                 <tr>
-                    <td>Sisa Hasil Usaha (SHU) yang Dibagikan</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="shu-dibagikan">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        Sisa Hasil Usaha (SHU) yang Dibagikan
+                    </td>
                     <td><input type="number" id="shu-dibagikan" placeholder="0" value="0"></td>
                 </tr>
                 <tr class="total-row">
@@ -346,27 +604,57 @@
                     <td colspan="2">D. ALOKASI SISA HASIL USAHA (SHU)</td>
                 </tr>
                 <tr>
-                    <td>1. Cadangan Koperasi (min. 25%)</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="cadangan-koperasi">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        1. Cadangan Koperasi (min. 25%)
+                    </td>
                     <td><input type="number" id="cadangan-koperasi" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>2. Dana Pengurus (maks. 10%)</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pengurus">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        2. Dana Pengurus (maks. 10%)
+                    </td>
                     <td><input type="number" id="dana-pengurus" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>3. Dana Karyawan (maks. 10%)</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-karyawan">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        3. Dana Karyawan (maks. 10%)
+                    </td>
                     <td><input type="number" id="dana-karyawan" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>4. Dana Pendidikan (maks. 10%)</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pendidikan">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        4. Dana Pendidikan (maks. 10%)
+                    </td>
                     <td><input type="number" id="dana-pendidikan" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>5. Dana Sosial (maks. 10%)</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-sosial">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        5. Dana Sosial (maks. 10%)
+                    </td>
                     <td><input type="number" id="dana-sosial" placeholder="0" value="0"></td>
                 </tr>
                 <tr>
-                    <td>6. Dana Pembagian kepada Anggota (sisa)</td>
+                    <td>
+                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-anggota">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                        6. Dana Pembagian kepada Anggota (sisa)
+                    </td>
                     <td><input type="number" id="dana-anggota" placeholder="0" value="0"></td>
                 </tr>
                 <tr class="total-row">
@@ -378,10 +666,11 @@
         
         <div class="note">
             <h4><i class="fas fa-lightbulb"></i> Catatan Penting:</h4>
-            <p>1. Format ini sesuai dengan standar akuntansi koperasi Indonesia.</p>
-            <p>2. Pastikan total alokasi SHU sama dengan jumlah SHU yang dibagikan.</p>
-            <p>3. Cadangan koperasi minimal 25% dari SHU yang dibagikan sesuai dengan UU No. 25 Tahun 1992 tentang Perkoperasian.</p>
-            <p>4. Laporan ini harus ditandatangani oleh pengurus dan pengawas koperasi.</p>
+            <p>1. Klik ikon <i class="fas fa-info-circle" style="color: #2c5aa0;"></i> untuk informasi detail setiap item.</p>
+            <p>2. Format ini sesuai dengan standar akuntansi koperasi Indonesia.</p>
+            <p>3. Pastikan total alokasi SHU sama dengan jumlah SHU yang dibagikan.</p>
+            <p>4. Cadangan koperasi minimal 25% dari SHU yang dibagikan sesuai dengan UU No. 25 Tahun 1992 tentang Perkoperasian.</p>
+            <p>5. Laporan ini harus ditandatangani oleh pengurus dan pengawas koperasi.</p>
         </div>
         
         <footer>
@@ -390,6 +679,390 @@
     </div>
 
     <script>
+        // Data informasi untuk setiap item
+        const infoData = {
+            'pendapatan-anggota': {
+                title: 'Pendapatan dari Anggota',
+                category: 'income',
+                definition: 'Semua penerimaan yang berasal dari transaksi dengan anggota koperasi.',
+                examples: [
+                    'Jasa pinjaman kepada anggota (bunga pinjaman)',
+                    'Bunga simpanan berjangka anggota',
+                    'Administrasi dan provisi kredit anggota',
+                    'Fee layanan kepada anggota'
+                ],
+                sources: [
+                    'Laporan unit simpan pinjam',
+                    'Bukti penerimaan kas/bank',
+                    'Rekening koran bank',
+                    'Kwitansi penerimaan'
+                ],
+                tips: [
+                    'Pisahkan antara simpanan (modal) dan pendapatan jasa',
+                    'Catat sesuai periode akrual (saat terjadinya transaksi)',
+                    'Cocokkan dengan laporan keuangan unit',
+                    'Gunakan kode akun yang konsisten'
+                ],
+                regulation: 'Diatur dalam AD/ART koperasi dan PSAK No. 27 (Akuntansi Koperasi)',
+                exampleNumbers: [5000000, 10000000, 25000000, 50000000]
+            },
+            'pendapatan-operasional': {
+                title: 'Pendapatan Operasional',
+                category: 'income',
+                definition: 'Pendapatan dari kegiatan usaha utama koperasi.',
+                examples: [
+                    'Penjualan barang di toko koperasi',
+                    'Pendapatan jasa (fotokopi, komputer, dll)',
+                    'Fee dari kerja sama usaha',
+                    'Pendapatan sewa aset koperasi'
+                ],
+                sources: [
+                    'Nota penjualan/kasir',
+                    'Faktur penjualan',
+                    'Laporan keuangan unit usaha',
+                    'Bukti penerimaan'
+                ],
+                tips: [
+                    'Pisahkan per jenis usaha/unit',
+                    'Catat setiap hari dan rekapitulasi bulanan',
+                    'Cocokkan dengan stok barang terjual',
+                    'Perhatikan potongan dan retur penjualan'
+                ],
+                regulation: 'PSAK No. 23 tentang Pendapatan',
+                exampleNumbers: [15000000, 30000000, 50000000, 75000000]
+            },
+            'pendapatan-non-operasional': {
+                title: 'Pendapatan Non-Operasional',
+                category: 'income',
+                definition: 'Pendapatan yang tidak berasal dari kegiatan usaha utama koperasi.',
+                examples: [
+                    'Pendapatan bunga deposito bank',
+                    'Dividen dari investasi',
+                    'Keuntungan penjualan aset tetap',
+                    'Pendapatan sewa di luar usaha utama'
+                ],
+                sources: [
+                    'Bukti bunga bank (bilyet)',
+                    'Kwitansi penjualan aset',
+                    'Laporan investasi',
+                    'Perjanjian sewa menyewa'
+                ],
+                tips: [
+                    'Pisahkan jelas dari pendapatan operasional',
+                    'Catat saat diterima (cash basis)',
+                    'Dokumen pendukung harus lengkap',
+                    'Perhatikan perlakuan pajak'
+                ],
+                regulation: 'PSAK No. 23 tentang Pendapatan',
+                exampleNumbers: [2000000, 5000000, 10000000, 15000000]
+            },
+            'pendapatan-lain': {
+                title: 'Pendapatan Lain-lain',
+                category: 'income',
+                definition: 'Pendapatan yang tidak dapat dikategorikan sebagai pendapatan operasional maupun non-operasional.',
+                examples: [
+                    'Pendapatan denda keterlambatan',
+                    'Sumbangan/hibah',
+                    'Selisih kurs (gain)',
+                    'Pendapatan lain yang tidak biasa'
+                ],
+                sources: [
+                    'Bukti penerimaan kas',
+                    'Nota/kwitansi',
+                    'Laporan bank (untuk selisih kurs)',
+                    'Surat perjanjian hibah'
+                ],
+                tips: [
+                    'Jangan terlalu sering muncul (indikasi salah klasifikasi)',
+                    'Dokumentasi harus jelas dan lengkap',
+                    'Evaluasi apakah bisa dikategorikan lain',
+                    'Transparan dalam pelaporan'
+                ],
+                regulation: 'PSAK No. 23 tentang Pendapatan',
+                exampleNumbers: [500000, 1000000, 3000000, 5000000]
+            },
+            'beban-operasional': {
+                title: 'Beban Operasional',
+                category: 'expense',
+                definition: 'Beban yang langsung terkait dengan kegiatan usaha utama koperasi.',
+                examples: [
+                    'Harga pokok penjualan (HPP)',
+                    'Biaya bahan baku',
+                    'Upah tenaga kerja langsung',
+                    'Biaya penjualan dan pemasaran'
+                ],
+                sources: [
+                    'Faktur pembelian',
+                    'Kwitansi pengeluaran kas',
+                    'Slip gaji',
+                    'Nota pembelian barang dagangan'
+                ],
+                tips: [
+                    'Hitung HPP dengan benar',
+                    'Pisahkan beban tetap dan variabel',
+                    'Alokasikan jika untuk beberapa produk',
+                    'Pantai anggaran vs realisasi'
+                ],
+                regulation: 'PSAK No. 2 tentang Laporan Arus Kas',
+                exampleNumbers: [8000000, 15000000, 25000000, 40000000]
+            },
+            'beban-administrasi': {
+                title: 'Beban Administrasi dan Umum',
+                category: 'expense',
+                definition: 'Beban untuk menjalankan organisasi dan administrasi koperasi.',
+                examples: [
+                    'Gaji pengurus dan staf administrasi',
+                    'Biaya listrik, air, telepon',
+                    'Perlengkapan kantor',
+                    'Sewa gedung/kantor'
+                ],
+                sources: [
+                    'Slip gaji',
+                    'Tagihan PLN/PDAM',
+                    'Faktur pembelian ATK',
+                    'Kwitansi sewa'
+                ],
+                tips: [
+                    'Buat klasifikasi yang detail',
+                    'Monitor pengeluaran rutin',
+                    'Bandikan dengan anggaran',
+                    'Optimalkan efisiensi'
+                ],
+                regulation: 'PSAK No. 2 tentang Laporan Arus Kas',
+                exampleNumbers: [5000000, 10000000, 15000000, 20000000]
+            },
+            'beban-penyusutan': {
+                title: 'Beban Penyusutan',
+                category: 'expense',
+                definition: 'Alokasi harga perolehan aset tetap selama masa manfaatnya.',
+                examples: [
+                    'Penyusutan gedung/kantor',
+                    'Penyusutan kendaraan operasional',
+                    'Penyusutan peralatan kantor',
+                    'Penyusutan mesin/peralatan'
+                ],
+                sources: [
+                    'Kartu aset tetap',
+                    'Perhitungan penyusutan',
+                    'Daftar inventaris aset',
+                    'Laporan depresiasi'
+                ],
+                tips: [
+                    'Gunakan metode penyusutan yang konsisten',
+                    'Perhatikan masa manfaat aset',
+                    'Update nilai residu jika perlu',
+                    'Buat jadwal penyusutan tahunan'
+                ],
+                regulation: 'PSAK No. 16 tentang Aset Tetap',
+                exampleNumbers: [1000000, 2500000, 5000000, 7500000]
+            },
+            'beban-lain': {
+                title: 'Beban Lain-lain',
+                category: 'expense',
+                definition: 'Beban yang tidak dapat dikategorikan dalam beban operasional, administrasi, atau penyusutan.',
+                examples: [
+                    'Beban bunga pinjaman',
+                    'Kerugian piutang',
+                    'Beban pelatihan',
+                    'Beban rapat dan konsultasi'
+                ],
+                sources: [
+                    'Rekening koran bank (bunga)',
+                    'Berita acara penghapusan piutang',
+                    'Kwitansi pelatihan',
+                    'Nota rapat/konsultasi'
+                ],
+                tips: [
+                    'Minimalkan pos ini',
+                    'Dokumentasi harus lengkap',
+                    'Evaluasi apakah bisa dikategorikan lain',
+                    'Transparan dalam pelaporan'
+                ],
+                regulation: 'PSAK No. 2 tentang Laporan Arus Kas',
+                exampleNumbers: [500000, 1500000, 3000000, 5000000]
+            },
+            'laba-rugi-sebelum-shu': {
+                title: 'Laba/Rugi Sebelum SHU',
+                category: 'shu',
+                definition: 'Selisih antara total pendapatan dan total beban sebelum dialokasikan sebagai Sisa Hasil Usaha.',
+                examples: [
+                    'Dihitung: Total Pendapatan - Total Beban',
+                    'Positif = Laba',
+                    'Negatif = Rugi'
+                ],
+                sources: [
+                    'Perhitungan dari laporan laba rugi',
+                    'Rekapitulasi pendapatan dan beban'
+                ],
+                tips: [
+                    'Pastikan semua pendapatan dan beban tercatat',
+                    'Verifikasi perhitungan',
+                    'Analisis jika ada perubahan signifikan',
+                    'Bandingkan dengan tahun sebelumnya'
+                ],
+                regulation: 'PSAK No. 27 tentang Akuntansi Koperasi',
+                exampleNumbers: [5000000, 10000000, 20000000, 30000000]
+            },
+            'shu-dibagikan': {
+                title: 'Sisa Hasil Usaha (SHU) yang Dibagikan',
+                category: 'shu',
+                definition: 'Bagian dari laba bersih yang akan dialokasikan sesuai dengan AD/ART koperasi.',
+                examples: [
+                    'Ditetapkan dalam Rapat Anggota Tahunan (RAT)',
+                    'Biasanya 70-90% dari laba bersih',
+                    'Di luar cadangan wajib'
+                ],
+                sources: [
+                    'Keputusan Rapat Anggota Tahunan',
+                    'Notulen RAT',
+                    'Perhitungan laba bersih'
+                ],
+                tips: [
+                    'Harus disetujui RAT',
+                    'Perhatikan proporsi yang sehat',
+                    'Sesuaikan dengan kebutuhan koperasi',
+                    'Transparan kepada anggota'
+                ],
+                regulation: 'UU No. 25 Tahun 1992 tentang Perkoperasian',
+                exampleNumbers: [3000000, 7500000, 15000000, 22500000]
+            },
+            'cadangan-koperasi': {
+                title: 'Cadangan Koperasi',
+                category: 'shu',
+                definition: 'Bagian dari SHU yang disisihkan untuk penguatan modal koperasi (minimal 25%).',
+                examples: [
+                    'Cadangan modal',
+                    'Cadangan ekspansi usaha',
+                    'Cadangan risiko'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase'
+                ],
+                tips: [
+                    'Minimal 25% dari SHU yang dibagikan',
+                    'Dapat digunakan untuk modal kerja',
+                    'Tidak boleh dibagikan kepada anggota',
+                    'Dicatat di ekuitas koperasi'
+                ],
+                regulation: 'UU No. 25 Tahun 1992 Pasal 55',
+                exampleNumbers: [1000000, 2500000, 5000000, 7500000]
+            },
+            'dana-pengurus': {
+                title: 'Dana Pengurus',
+                category: 'shu',
+                definition: 'Bagian dari SHU untuk honorarium/imbalan pengurus koperasi (maksimal 10%).',
+                examples: [
+                    'Honorarium pengurus',
+                    'Insentif kinerja pengurus',
+                    'Tunjangan pengurus'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase'
+                ],
+                tips: [
+                    'Maksimal 10% dari SHU yang dibagikan',
+                    'Proporsional dengan kinerja',
+                    'Transparan dalam penentuan besaran',
+                    'Dibayarkan setelah disetujui RAT'
+                ],
+                regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
+                exampleNumbers: [300000, 750000, 1500000, 2250000]
+            },
+            'dana-karyawan': {
+                title: 'Dana Karyawan',
+                category: 'shu',
+                definition: 'Bagian dari SHU untuk bonus/imbalan karyawan koperasi (maksimal 10%).',
+                examples: [
+                    'Bonus karyawan',
+                    'Insentif kinerja',
+                    'Tunjangan prestasi'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase'
+                ],
+                tips: [
+                    'Maksimal 10% dari SHU yang dibagikan',
+                    'Sesuaikan dengan kontribusi karyawan',
+                    'Transparan dalam penentuan besaran',
+                    'Dibayarkan setelah disetujui RAT'
+                ],
+                regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
+                exampleNumbers: [300000, 750000, 1500000, 2250000]
+            },
+            'dana-pendidikan': {
+                title: 'Dana Pendidikan',
+                category: 'shu',
+                definition: 'Bagian dari SHU untuk kegiatan pendidikan dan pelatihan (maksimal 10%).',
+                examples: [
+                    'Pelatihan anggota',
+                    'Pendidikan pengurus dan karyawan',
+                    'Program literasi keuangan',
+                    'Seminar dan workshop'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase'
+                ],
+                tips: [
+                    'Maksimal 10% dari SHU yang dibagikan',
+                    'Fokus pada peningkatan kapasitas',
+                    'Rencanakan program yang bermanfaat',
+                    'Evaluasi hasil pendidikan'
+                ],
+                regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
+                exampleNumbers: [300000, 750000, 1500000, 2250000]
+            },
+            'dana-sosial': {
+                title: 'Dana Sosial',
+                category: 'shu',
+                definition: 'Bagian dari SHU untuk kegiatan sosial kemasyarakatan (maksimal 10%).',
+                examples: [
+                    'Bantuan sosial anggota',
+                    'Program masyarakat sekitar',
+                    'Kegiatan filantropi',
+                    'Bencana alam'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sesuai persentase'
+                ],
+                tips: [
+                    'Maksimal 10% dari SHU yang dibagikan',
+                    'Sesuaikan dengan kemampuan koperasi',
+                    'Fokus pada anggota dan masyarakat sekitar',
+                    'Transparan dalam penyaluran'
+                ],
+                regulation: 'PP No. 9 Tahun 1995 tentang Pelaksanaan Kegiatan Usaha Koperasi',
+                exampleNumbers: [300000, 750000, 1500000, 2250000]
+            },
+            'dana-anggota': {
+                title: 'Dana Pembagian kepada Anggota',
+                category: 'shu',
+                definition: 'Bagian dari SHU yang dibagikan kepada anggota sesuai partisipasinya (sisa setelah alokasi lain).',
+                examples: [
+                    'Dibagikan berdasarkan jasa usaha',
+                    'Dibagikan berdasarkan simpanan',
+                    'Kombinasi jasa usaha dan simpanan'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU',
+                    'Perhitungan sisa setelah alokasi lain',
+                    'Data transaksi anggota'
+                ],
+                tips: [
+                    'Hitung berdasarkan sistem yang ditetapkan AD/ART',
+                    'Proporsional dengan partisipasi anggota',
+                    'Transparan dalam perhitungan',
+                    'Bayarkan tepat waktu'
+                ],
+                regulation: 'UU No. 25 Tahun 1992 tentang Perkoperasian',
+                exampleNumbers: [1500000, 3750000, 7500000, 11250000]
+            }
+        };
+        
         // Fungsi untuk menghitung total
         function hitungTotal() {
             // Ambil nilai dari input
@@ -439,6 +1112,118 @@
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             }).format(angka);
+        }
+        
+        // Fungsi untuk menampilkan modal informasi
+        function showInfoModal(infoId) {
+            const info = infoData[infoId];
+            if (!info) return;
+            
+            // Set judul modal
+            document.getElementById('modalTitle').textContent = info.title;
+            
+            // Tentukan ikon dan warna berdasarkan kategori
+            let categoryIcon, categoryClass, categoryText;
+            if (info.category === 'income') {
+                categoryIcon = 'fa-arrow-down';
+                categoryClass = 'income-icon';
+                categoryText = 'PENDAPATAN';
+            } else if (info.category === 'expense') {
+                categoryIcon = 'fa-arrow-up';
+                categoryClass = 'expense-icon';
+                categoryText = 'BEBAN';
+            } else {
+                categoryIcon = 'fa-hand-holding-usd';
+                categoryClass = 'shu-icon';
+                categoryText = 'SISA HASIL USAHA';
+            }
+            
+            // Buat konten modal
+            let modalContent = `
+                <div class="info-category">
+                    <div class="category-icon ${categoryClass}">
+                        <i class="fas ${categoryIcon}"></i>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; color: #2c5aa0;">${info.title}</h3>
+                        <p style="margin: 0; color: #666; font-size: 14px;">Kategori: ${categoryText}</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <h4><i class="fas fa-book"></i> Definisi</h4>
+                    <div class="info-content">
+                        <p>${info.definition}</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <h4><i class="fas fa-list"></i> Contoh</h4>
+                    <div class="info-content">
+                        <ul>
+                            ${info.examples.map(example => `<li>${example}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <h4><i class="fas fa-database"></i> Sumber Data</h4>
+                    <div class="info-content">
+                        <ul>
+                            ${info.sources.map(source => `<li>${source}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <h4><i class="fas fa-lightbulb"></i> Tips Pencatatan</h4>
+                    <div class="info-content">
+                        <ul>
+                            ${info.tips.map(tip => `<li>${tip}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <h4><i class="fas fa-balance-scale"></i> Regulasi</h4>
+                    <div class="regulation-note">
+                        <p><strong>${info.regulation}</strong></p>
+                    </div>
+                </div>
+            `;
+            
+            // Tambahkan contoh angka jika ada
+            if (info.exampleNumbers && info.exampleNumbers.length > 0) {
+                modalContent += `
+                    <div class="info-item">
+                        <h4><i class="fas fa-calculator"></i> Contoh Angka</h4>
+                        <p>Klik salah satu untuk mengisi otomatis:</p>
+                        <div class="quick-example">
+                            ${info.exampleNumbers.map(num => `
+                                <div class="example-number" data-value="${num}">
+                                    Rp ${formatRupiah(num)}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Set konten modal
+            document.getElementById('modalBody').innerHTML = modalContent;
+            
+            // Tampilkan modal
+            document.getElementById('infoModal').style.display = 'flex';
+            
+            // Tambahkan event listener untuk contoh angka
+            document.querySelectorAll('.example-number').forEach(item => {
+                item.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    document.getElementById(infoId).value = value;
+                    hitungTotal();
+                    alert(`Nilai ${formatRupiah(value)} telah dimasukkan ke ${info.title}`);
+                });
+            });
         }
         
         // Fungsi untuk mengisi data contoh
@@ -545,7 +1330,16 @@
                 ["Catatan:", ""],
                 ["1. Format sesuai standar akuntansi koperasi Indonesia", ""],
                 ["2. Cadangan koperasi minimal 25% dari SHU yang dibagikan", ""],
-                ["3. Laporan harus ditandatangani oleh pengurus dan pengawas koperasi", ""]
+                ["3. Laporan harus ditandatangani oleh pengurus dan pengawas koperasi", ""],
+                ["", ""],
+                ["Disetujui oleh:", ""],
+                ["Ketua Pengurus", ""],
+                ["", ""],
+                ["(__________________________)", ""],
+                ["", ""],
+                ["Ketua Pengawas", ""],
+                ["", ""],
+                ["(__________________________)", ""]
             ];
             
             // Buat worksheet
@@ -569,6 +1363,33 @@
             XLSX.writeFile(wb, fileName);
             
             alert(`File ${fileName} berhasil diunduh.`);
+        });
+        
+        // Tambahkan event listener untuk ikon info
+        document.querySelectorAll('.info-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const infoId = this.getAttribute('data-info');
+                showInfoModal(infoId);
+            });
+        });
+        
+        // Tutup modal ketika klik close button
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('infoModal').style.display = 'none';
+        });
+        
+        // Tutup modal ketika klik di luar modal
+        document.getElementById('infoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+        
+        // Tutup modal dengan tombol ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.getElementById('infoModal').style.display = 'none';
+            }
         });
         
         // Tambahkan event listener untuk menghitung otomatis saat input berubah
