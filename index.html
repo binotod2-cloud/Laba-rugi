@@ -73,15 +73,15 @@
             background-color: #2c5aa0;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             transition: background-color 0.3s;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         
         .btn:hover {
@@ -110,6 +110,37 @@
         
         .btn-calculate:hover {
             background-color: #138496;
+        }
+        
+        .btn-add {
+            background-color: #6f42c1;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+        
+        .btn-add:hover {
+            background-color: #5a32a3;
+        }
+        
+        .btn-remove {
+            background-color: #ffc107;
+            color: #212529;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+        
+        .btn-remove:hover {
+            background-color: #e0a800;
+        }
+        
+        .btn-edit {
+            background-color: #20c997;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+        
+        .btn-edit:hover {
+            background-color: #199d76;
         }
         
         .form-section {
@@ -186,6 +217,13 @@
             font-weight: bold;
         }
         
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
         .percentage-badge {
             display: inline-block;
             background-color: #e9f7fe;
@@ -195,6 +233,33 @@
             border-radius: 10px;
             margin-left: 8px;
             font-weight: 600;
+        }
+        
+        .item-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+        
+        .item-name {
+            flex: 1;
+        }
+        
+        .item-amount {
+            width: 200px;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .edit-input {
+            padding: 8px;
+            border: 1px solid #2c5aa0;
+            border-radius: 4px;
+            width: 100%;
         }
         
         .note {
@@ -482,6 +547,19 @@
             .summary-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .item-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .item-amount {
+                width: 100%;
+            }
+            
+            .item-actions {
+                justify-content: flex-start;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -540,222 +618,441 @@
         
         <h2><i class="fas fa-file-invoice-dollar"></i> Format Laporan Laba Rugi</h2>
         
-        <table class="financial-table">
-            <thead>
-                <tr>
-                    <th width="70%">Uraian</th>
-                    <th width="30%">Jumlah (Rp)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Bagian Pendapatan -->
-                <tr class="section-title">
-                    <td colspan="2">A. PENDAPATAN</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-anggota">
+        <!-- Bagian Pendapatan -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3>A. PENDAPATAN</h3>
+                <button class="btn btn-add" id="add-pendapatan-btn">
+                    <i class="fas fa-plus"></i> Tambah Item Pendapatan
+                </button>
+            </div>
+            
+            <div id="pendapatan-list">
+                <!-- Item Pendapatan dari Anggota -->
+                <div class="item-row" id="pendapatan-anggota-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Pendapatan dari Anggota" 
+                               data-id="pendapatan-anggota" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="pendapatan-anggota" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('pendapatan-anggota')">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        1. Pendapatan dari Anggota
-                    </td>
-                    <td><input type="number" id="pendapatan-anggota" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-operasional">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        2. Pendapatan Operasional
-                    </td>
-                    <td><input type="number" id="pendapatan-operasional" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-non-operasional">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        3. Pendapatan Non-Operasional
-                    </td>
-                    <td><input type="number" id="pendapatan-non-operasional" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="pendapatan-lain">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        4. Pendapatan Lain-lain
-                    </td>
-                    <td><input type="number" id="pendapatan-lain" placeholder="0" value="0"></td>
-                </tr>
-                <tr class="total-row">
-                    <td><strong>TOTAL PENDAPATAN</strong></td>
-                    <td><span id="total-pendapatan">0</span></td>
-                </tr>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('pendapatan-anggota-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
                 
-                <!-- Bagian Beban -->
-                <tr class="section-title">
-                    <td colspan="2">B. BEBAN</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-operasional">
+                <!-- Item Pendapatan Operasional -->
+                <div class="item-row" id="pendapatan-operasional-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Pendapatan Operasional" 
+                               data-id="pendapatan-operasional" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="pendapatan-operasional" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('pendapatan-operasional')">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        1. Beban Operasional
-                    </td>
-                    <td><input type="number" id="beban-operasional" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-administrasi">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        2. Beban Administrasi dan Umum
-                    </td>
-                    <td><input type="number" id="beban-administrasi" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-penyusutan">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        3. Beban Penyusutan
-                    </td>
-                    <td><input type="number" id="beban-penyusutan" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="beban-lain">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        4. Beban Lain-lain
-                    </td>
-                    <td><input type="number" id="beban-lain" placeholder="0" value="0"></td>
-                </tr>
-                <tr class="total-row">
-                    <td><strong>TOTAL BEBAN</strong></td>
-                    <td><span id="total-beban">0</span></td>
-                </tr>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('pendapatan-operasional-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
                 
-                <!-- Bagian Laba/Rugi -->
-                <tr class="section-title">
-                    <td colspan="2">C. LABA/RUGI SEBELUM SHU</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="laba-rugi-sebelum-shu">
+                <!-- Item Pendapatan Non-Operasional -->
+                <div class="item-row" id="pendapatan-non-operasional-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Pendapatan Non-Operasional" 
+                               data-id="pendapatan-non-operasional" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="pendapatan-non-operasional" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('pendapatan-non-operasional')">
                             <i class="fas fa-info-circle"></i>
-                        </span>
-                        Laba/Rugi Sebelum SHU (Total Pendapatan - Total Beban)
-                    </td>
-                    <td><span id="laba-rugi-sebelum-shu">0</span></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="shu-dibagikan">
-                            <i class="fas fa-info-circle"></i>
-                        </span>
-                        Sisa Hasil Usaha (SHU) yang Dibagikan
-                    </td>
-                    <td><input type="number" id="shu-dibagikan" placeholder="0" value="0"></td>
-                </tr>
-                <tr class="total-row">
-                    <td><strong>LABA/RUGI BERSIH</strong></td>
-                    <td><span id="laba-rugi-bersih">0</span></td>
-                </tr>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('pendapatan-non-operasional-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
                 
-                <!-- Bagian Alokasi SHU -->
-                <tr class="section-title">
-                    <td colspan="2">D. ALOKASI SISA HASIL USAHA (SHU)</td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-modal">
+                <!-- Item Pendapatan Lain-lain -->
+                <div class="item-row" id="pendapatan-lain-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Pendapatan Lain-lain" 
+                               data-id="pendapatan-lain" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="pendapatan-lain" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('pendapatan-lain')">
                             <i class="fas fa-info-circle"></i>
-                        1. Dana Modal/Simpanan
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('pendapatan-lain-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="total-row" style="padding: 15px; margin-top: 10px; border-radius: 5px;">
+                <strong>TOTAL PENDAPATAN: <span id="total-pendapatan">0</span></strong>
+            </div>
+        </div>
+        
+        <!-- Bagian Beban -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3>B. BEBAN</h3>
+                <button class="btn btn-add" id="add-beban-btn">
+                    <i class="fas fa-plus"></i> Tambah Item Beban
+                </button>
+            </div>
+            
+            <div id="beban-list">
+                <!-- Item Beban Operasional -->
+                <div class="item-row" id="beban-operasional-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Beban Operasional" 
+                               data-id="beban-operasional" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="beban-operasional" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('beban-operasional')">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('beban-operasional-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Beban Administrasi dan Umum -->
+                <div class="item-row" id="beban-administrasi-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Beban Administrasi dan Umum" 
+                               data-id="beban-administrasi" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="beban-administrasi" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('beban-administrasi')">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('beban-administrasi-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Beban Penyusutan -->
+                <div class="item-row" id="beban-penyusutan-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Beban Penyusutan" 
+                               data-id="beban-penyusutan" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="beban-penyusutan" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('beban-penyusutan')">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('beban-penyusutan-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Beban Lain-lain -->
+                <div class="item-row" id="beban-lain-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Beban Lain-lain" 
+                               data-id="beban-lain" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="beban-lain" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('beban-lain')">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('beban-lain-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="total-row" style="padding: 15px; margin-top: 10px; border-radius: 5px;">
+                <strong>TOTAL BEBAN: <span id="total-beban">0</span></strong>
+            </div>
+        </div>
+        
+        <!-- Bagian Laba/Rugi -->
+        <div class="form-section">
+            <h3>C. LABA/RUGI SEBELUM SHU</h3>
+            
+            <div class="item-row">
+                <div class="item-name">
+                    <span>Laba/Rugi Sebelum SHU (Total Pendapatan - Total Beban)</span>
+                </div>
+                <div class="item-amount">
+                    <span id="laba-rugi-sebelum-shu">0</span>
+                </div>
+                <div class="item-actions">
+                    <button class="btn btn-edit" onclick="showInfoModal('laba-rugi-sebelum-shu')">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="item-row">
+                <div class="item-name">
+                    <input type="text" class="edit-input" value="Sisa Hasil Usaha (SHU) yang Dibagikan" 
+                           data-id="shu-dibagikan" onchange="updateItemName(this)">
+                </div>
+                <div class="item-amount">
+                    <input type="number" id="shu-dibagikan" value="0" 
+                           placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                </div>
+                <div class="item-actions">
+                    <button class="btn btn-edit" onclick="showInfoModal('shu-dibagikan')">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="total-row" style="padding: 15px; margin-top: 10px; border-radius: 5px;">
+                <strong>LABA/RUGI BERSIH: <span id="laba-rugi-bersih">0</span></strong>
+            </div>
+        </div>
+        
+        <!-- Bagian Alokasi SHU -->
+        <div class="form-section">
+            <div class="section-header">
+                <h3>D. ALOKASI SISA HASIL USAHA (SHU)</h3>
+                <button class="btn btn-add" id="add-shu-btn">
+                    <i class="fas fa-plus"></i> Tambah Item Alokasi SHU
+                </button>
+            </div>
+            
+            <div id="shu-list">
+                <!-- Item Dana Modal/Simpanan -->
+                <div class="item-row" id="dana-modal-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Dana Modal/Simpanan" 
+                               data-id="dana-modal" onchange="updateItemName(this)">
                         <span class="percentage-badge">40%</span>
-                    </td>
-                    <td><input type="number" id="dana-modal" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="poin-belanja">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="dana-modal" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('dana-modal')">
                             <i class="fas fa-info-circle"></i>
-                        2. Poin Belanja
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('dana-modal-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Poin Belanja -->
+                <div class="item-row" id="poin-belanja-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Poin Belanja" 
+                               data-id="poin-belanja" onchange="updateItemName(this)">
                         <span class="percentage-badge">5%</span>
-                    </td>
-                    <td><input type="number" id="poin-belanja" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="cadangan">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="poin-belanja" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('poin-belanja')">
                             <i class="fas fa-info-circle"></i>
-                        3. Cadangan
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('poin-belanja-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Cadangan -->
+                <div class="item-row" id="cadangan-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Cadangan" 
+                               data-id="cadangan" onchange="updateItemName(this)">
                         <span class="percentage-badge">20%</span>
-                    </td>
-                    <td><input type="number" id="cadangan" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pengurus">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="cadangan" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('cadangan')">
                             <i class="fas fa-info-circle"></i>
-                        4. Dana Pengurus
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('cadangan-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Dana Pengurus -->
+                <div class="item-row" id="dana-pengurus-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Dana Pengurus" 
+                               data-id="dana-pengurus" onchange="updateItemName(this)">
                         <span class="percentage-badge">7%</span>
-                    </td>
-                    <td><input type="number" id="dana-pengurus" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pengawas">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="dana-pengurus" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('dana-pengurus')">
                             <i class="fas fa-info-circle"></i>
-                        5. Dana Pengawas
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('dana-pengurus-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Dana Pengawas -->
+                <div class="item-row" id="dana-pengawas-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Dana Pengawas" 
+                               data-id="dana-pengawas" onchange="updateItemName(this)">
                         <span class="percentage-badge">5%</span>
-                    </td>
-                    <td><input type="number" id="dana-pengawas" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-karyawan">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="dana-pengawas" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('dana-pengawas')">
                             <i class="fas fa-info-circle"></i>
-                        6. Dana Karyawan
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('dana-pengawas-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Dana Karyawan -->
+                <div class="item-row" id="dana-karyawan-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Dana Karyawan" 
+                               data-id="dana-karyawan" onchange="updateItemName(this)">
                         <span class="percentage-badge">5%</span>
-                    </td>
-                    <td><input type="number" id="dana-karyawan" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-sosial">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="dana-karyawan" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('dana-karyawan')">
                             <i class="fas fa-info-circle"></i>
-                        7. Dana Sosial
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('dana-karyawan-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Dana Sosial -->
+                <div class="item-row" id="dana-sosial-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Dana Sosial" 
+                               data-id="dana-sosial" onchange="updateItemName(this)">
                         <span class="percentage-badge">5%</span>
-                    </td>
-                    <td><input type="number" id="dana-sosial" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pendidikan">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="dana-sosial" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('dana-sosial')">
                             <i class="fas fa-info-circle"></i>
-                        8. Dana Pendidikan
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('dana-sosial-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Dana Pendidikan -->
+                <div class="item-row" id="dana-pendidikan-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Dana Pendidikan" 
+                               data-id="dana-pendidikan" onchange="updateItemName(this)">
                         <span class="percentage-badge">3%</span>
-                    </td>
-                    <td><input type="number" id="dana-pendidikan" placeholder="0" value="0"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="info-icon" data-tooltip="Klik untuk info detail" data-info="dana-pembangunan">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="dana-pendidikan" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('dana-pendidikan')">
                             <i class="fas fa-info-circle"></i>
-                        9. Dana Pembangunan
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('dana-pendidikan-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Item Dana Pembangunan -->
+                <div class="item-row" id="dana-pembangunan-row">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Dana Pembangunan" 
+                               data-id="dana-pembangunan" onchange="updateItemName(this)">
                         <span class="percentage-badge">10%</span>
-                    </td>
-                    <td><input type="number" id="dana-pembangunan" placeholder="0" value="0"></td>
-                </tr>
-                <tr class="total-row">
-                    <td><strong>TOTAL ALOKASI SHU</strong></td>
-                    <td><span id="total-alokasi-shu">0</span></td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="dana-pembangunan" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-edit" onclick="showInfoModal('dana-pembangunan')">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="btn btn-remove" onclick="removeItem('dana-pembangunan-row')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="total-row" style="padding: 15px; margin-top: 10px; border-radius: 5px;">
+                <strong>TOTAL ALOKASI SHU: <span id="total-alokasi-shu">0</span></strong>
+            </div>
+        </div>
         
         <!-- Ringkasan Distribusi -->
         <div class="distribution-summary">
@@ -768,11 +1065,12 @@
         <div class="note">
             <h4><i class="fas fa-lightbulb"></i> Catatan Penting:</h4>
             <p>1. Klik ikon <i class="fas fa-info-circle" style="color: #2c5aa0;"></i> untuk informasi detail setiap item.</p>
-            <p>2. Format ini sesuai dengan standar akuntansi koperasi Indonesia.</p>
-            <p>3. Total alokasi SHU harus sama dengan jumlah SHU yang dibagikan.</p>
-            <p>4. Persentase alokasi SHU sesuai dengan AD/ART koperasi yang berlaku.</p>
-            <p>5. Gunakan tombol "Hitung Otomatis SHU" untuk menghitung alokasi berdasarkan persentase.</p>
-            <p>6. Laporan ini harus ditandatangani oleh pengurus dan pengawas koperasi.</p>
+            <p>2. Klik tombol <i class="fas fa-plus" style="color: #6f42c1;"></i> untuk menambah item baru.</p>
+            <p>3. Edit nama item dengan mengubah teks di kolom nama.</p>
+            <p>4. Format ini sesuai dengan standar akuntansi koperasi Indonesia.</p>
+            <p>5. Total alokasi SHU harus sama dengan jumlah SHU yang dibagikan.</p>
+            <p>6. Gunakan tombol "Hitung Otomatis SHU" untuk menghitung alokasi berdasarkan persentase.</p>
+            <p>7. Laporan ini harus ditandatangani oleh pengurus dan pengawas koperasi.</p>
         </div>
         
         <footer>
@@ -793,9 +1091,6 @@
             'dana-pendidikan': 3,  // Dana Pendidikan
             'dana-pembangunan': 10 // Dana Pembangunan
         };
-        
-        // Total persentase (harus 100%)
-        const totalPercentage = Object.values(shuPercentages).reduce((a, b) => a + b, 0);
         
         // Data informasi untuk setiap item
         const infoData = {
@@ -1247,27 +1542,27 @@
             }
         };
         
+        // Counter untuk item baru
+        let pendapatanCounter = 0;
+        let bebanCounter = 0;
+        let shuCounter = 0;
+        
         // Fungsi untuk menghitung total
         function hitungTotal() {
-            // Ambil nilai dari input
-            const pendapatanAnggota = parseFloat(document.getElementById('pendapatan-anggota').value) || 0;
-            const pendapatanOperasional = parseFloat(document.getElementById('pendapatan-operasional').value) || 0;
-            const pendapatanNonOperasional = parseFloat(document.getElementById('pendapatan-non-operasional').value) || 0;
-            const pendapatanLain = parseFloat(document.getElementById('pendapatan-lain').value) || 0;
-            
-            const bebanOperasional = parseFloat(document.getElementById('beban-operasional').value) || 0;
-            const bebanAdministrasi = parseFloat(document.getElementById('beban-administrasi').value) || 0;
-            const bebanPenyusutan = parseFloat(document.getElementById('beban-penyusutan').value) || 0;
-            const bebanLain = parseFloat(document.getElementById('beban-lain').value) || 0;
-            
-            const shuDibagikan = parseFloat(document.getElementById('shu-dibagikan').value) || 0;
-            
             // Hitung total pendapatan
-            const totalPendapatan = pendapatanAnggota + pendapatanOperasional + pendapatanNonOperasional + pendapatanLain;
+            let totalPendapatan = 0;
+            const pendapatanItems = document.querySelectorAll('#pendapatan-list input[type="number"]');
+            pendapatanItems.forEach(input => {
+                totalPendapatan += parseFloat(input.value) || 0;
+            });
             document.getElementById('total-pendapatan').textContent = formatRupiah(totalPendapatan);
             
             // Hitung total beban
-            const totalBeban = bebanOperasional + bebanAdministrasi + bebanPenyusutan + bebanLain;
+            let totalBeban = 0;
+            const bebanItems = document.querySelectorAll('#beban-list input[type="number"]');
+            bebanItems.forEach(input => {
+                totalBeban += parseFloat(input.value) || 0;
+            });
             document.getElementById('total-beban').textContent = formatRupiah(totalBeban);
             
             // Hitung laba rugi sebelum SHU
@@ -1275,22 +1570,16 @@
             document.getElementById('laba-rugi-sebelum-shu').textContent = formatRupiah(labaRugiSebelumSHU);
             
             // Hitung laba rugi bersih
+            const shuDibagikan = parseFloat(document.getElementById('shu-dibagikan').value) || 0;
             const labaRugiBersih = labaRugiSebelumSHU - shuDibagikan;
             document.getElementById('laba-rugi-bersih').textContent = formatRupiah(labaRugiBersih);
             
             // Hitung total alokasi SHU
-            const danaModal = parseFloat(document.getElementById('dana-modal').value) || 0;
-            const poinBelanja = parseFloat(document.getElementById('poin-belanja').value) || 0;
-            const cadangan = parseFloat(document.getElementById('cadangan').value) || 0;
-            const danaPengurus = parseFloat(document.getElementById('dana-pengurus').value) || 0;
-            const danaPengawas = parseFloat(document.getElementById('dana-pengawas').value) || 0;
-            const danaKaryawan = parseFloat(document.getElementById('dana-karyawan').value) || 0;
-            const danaSosial = parseFloat(document.getElementById('dana-sosial').value) || 0;
-            const danaPendidikan = parseFloat(document.getElementById('dana-pendidikan').value) || 0;
-            const danaPembangunan = parseFloat(document.getElementById('dana-pembangunan').value) || 0;
-            
-            const totalAlokasiSHU = danaModal + poinBelanja + cadangan + danaPengurus + danaPengawas + 
-                                   danaKaryawan + danaSosial + danaPendidikan + danaPembangunan;
+            let totalAlokasiSHU = 0;
+            const shuItems = document.querySelectorAll('#shu-list input[type="number"]');
+            shuItems.forEach(input => {
+                totalAlokasiSHU += parseFloat(input.value) || 0;
+            });
             document.getElementById('total-alokasi-shu').textContent = formatRupiah(totalAlokasiSHU);
             
             // Update ringkasan distribusi
@@ -1306,16 +1595,13 @@
                 return;
             }
             
-            // Hitung alokasi berdasarkan persentase
-            document.getElementById('dana-modal').value = Math.round(shuDibagikan * shuPercentages['dana-modal'] / 100);
-            document.getElementById('poin-belanja').value = Math.round(shuDibagikan * shuPercentages['poin-belanja'] / 100);
-            document.getElementById('cadangan').value = Math.round(shuDibagikan * shuPercentages['cadangan'] / 100);
-            document.getElementById('dana-pengurus').value = Math.round(shuDibagikan * shuPercentages['dana-pengurus'] / 100);
-            document.getElementById('dana-pengawas').value = Math.round(shuDibagikan * shuPercentages['dana-pengawas'] / 100);
-            document.getElementById('dana-karyawan').value = Math.round(shuDibagikan * shuPercentages['dana-karyawan'] / 100);
-            document.getElementById('dana-sosial').value = Math.round(shuDibagikan * shuPercentages['dana-sosial'] / 100);
-            document.getElementById('dana-pendidikan').value = Math.round(shuDibagikan * shuPercentages['dana-pendidikan'] / 100);
-            document.getElementById('dana-pembangunan').value = Math.round(shuDibagikan * shuPercentages['dana-pembangunan'] / 100);
+            // Hitung alokasi berdasarkan persentase untuk item yang ada
+            for (const [id, percentage] of Object.entries(shuPercentages)) {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.value = Math.round(shuDibagikan * percentage / 100);
+                }
+            }
             
             // Hitung ulang total
             hitungTotal();
@@ -1335,21 +1621,33 @@
             let summaryHTML = '';
             let totalCalculated = 0;
             
-            for (const [id, percentage] of Object.entries(shuPercentages)) {
-                const amount = parseFloat(document.getElementById(id).value) || 0;
-                const calculatedAmount = Math.round(shuTotal * percentage / 100);
+            // Hitung untuk item SHU yang ada
+            const shuInputs = document.querySelectorAll('#shu-list input[type="number"]');
+            shuInputs.forEach(input => {
+                const amount = parseFloat(input.value) || 0;
+                const row = input.closest('.item-row');
+                const nameInput = row.querySelector('.item-name input[type="text"]');
+                const name = nameInput ? nameInput.value : 'Item SHU';
+                
+                // Cari persentase jika ada badge
+                const percentageBadge = row.querySelector('.percentage-badge');
+                let percentageText = '';
+                if (percentageBadge) {
+                    percentageText = percentageBadge.textContent;
+                }
+                
                 const actualPercentage = shuTotal > 0 ? Math.round((amount / shuTotal) * 100) : 0;
                 
                 summaryHTML += `
                     <div class="summary-item">
-                        <h5>${infoData[id].title}</h5>
+                        <h5>${name}</h5>
                         <div class="summary-value">Rp ${formatRupiah(amount)}</div>
-                        <div class="summary-percentage">${actualPercentage}% (target: ${percentage}%)</div>
+                        <div class="summary-percentage">${actualPercentage}% ${percentageText ? '(target: ' + percentageText + ')' : ''}</div>
                     </div>
                 `;
                 
                 totalCalculated += amount;
-            }
+            });
             
             // Tambahkan total
             summaryHTML += `
@@ -1371,10 +1669,187 @@
             }).format(angka);
         }
         
+        // Fungsi untuk menambah item pendapatan baru
+        function tambahItemPendapatan() {
+            pendapatanCounter++;
+            const newId = `pendapatan-tambahan-${pendapatanCounter}`;
+            const newRowId = `${newId}-row`;
+            
+            const newItemHTML = `
+                <div class="item-row" id="${newRowId}">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Pendapatan Tambahan ${pendapatanCounter}" 
+                               data-id="${newId}" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="${newId}" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-remove" onclick="removeItem('${newRowId}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('pendapatan-list').insertAdjacentHTML('beforeend', newItemHTML);
+            
+            // Tambahkan info data untuk item baru
+            infoData[newId] = {
+                title: `Pendapatan Tambahan ${pendapatanCounter}`,
+                category: 'income',
+                definition: 'Item pendapatan tambahan yang ditambahkan secara manual.',
+                examples: [
+                    'Sesuaikan dengan jenis pendapatan tambahan koperasi'
+                ],
+                sources: [
+                    'Bukti penerimaan kas/bank',
+                    'Nota/kwitansi'
+                ],
+                tips: [
+                    'Pastikan dokumentasi lengkap',
+                    'Klasifikasikan dengan benar',
+                    'Transparan dalam pelaporan'
+                ],
+                regulation: 'PSAK No. 23 tentang Pendapatan',
+                exampleNumbers: [1000000, 2500000, 5000000, 7500000]
+            };
+            
+            alert(`Item pendapatan baru telah ditambahkan. Anda dapat mengedit namanya.`);
+        }
+        
+        // Fungsi untuk menambah item beban baru
+        function tambahItemBeban() {
+            bebanCounter++;
+            const newId = `beban-tambahan-${bebanCounter}`;
+            const newRowId = `${newId}-row`;
+            
+            const newItemHTML = `
+                <div class="item-row" id="${newRowId}">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Beban Tambahan ${bebanCounter}" 
+                               data-id="${newId}" onchange="updateItemName(this)">
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="${newId}" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-remove" onclick="removeItem('${newRowId}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('beban-list').insertAdjacentHTML('beforeend', newItemHTML);
+            
+            // Tambahkan info data untuk item baru
+            infoData[newId] = {
+                title: `Beban Tambahan ${bebanCounter}`,
+                category: 'expense',
+                definition: 'Item beban tambahan yang ditambahkan secara manual.',
+                examples: [
+                    'Sesuaikan dengan jenis beban tambahan koperasi'
+                ],
+                sources: [
+                    'Bukti pengeluaran kas/bank',
+                    'Nota/kwitansi'
+                ],
+                tips: [
+                    'Pastikan dokumentasi lengkap',
+                    'Klasifikasikan dengan benar',
+                    'Transparan dalam pelaporan'
+                ],
+                regulation: 'PSAK No. 2 tentang Laporan Arus Kas',
+                exampleNumbers: [500000, 1000000, 2000000, 3000000]
+            };
+            
+            alert(`Item beban baru telah ditambahkan. Anda dapat mengedit namanya.`);
+        }
+        
+        // Fungsi untuk menambah item alokasi SHU baru
+        function tambahItemSHU() {
+            shuCounter++;
+            const newId = `shu-tambahan-${shuCounter}`;
+            const newRowId = `${newId}-row`;
+            
+            const newItemHTML = `
+                <div class="item-row" id="${newRowId}">
+                    <div class="item-name">
+                        <input type="text" class="edit-input" value="Alokasi SHU Tambahan ${shuCounter}" 
+                               data-id="${newId}" onchange="updateItemName(this)">
+                        <span class="percentage-badge">0%</span>
+                    </div>
+                    <div class="item-amount">
+                        <input type="number" id="${newId}" value="0" 
+                               placeholder="Jumlah (Rp)" oninput="hitungTotal()">
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn btn-remove" onclick="removeItem('${newRowId}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('shu-list').insertAdjacentHTML('beforeend', newItemHTML);
+            
+            // Tambahkan info data untuk item baru
+            infoData[newId] = {
+                title: `Alokasi SHU Tambahan ${shuCounter}`,
+                category: 'shu',
+                definition: 'Item alokasi SHU tambahan yang ditambahkan secara manual.',
+                examples: [
+                    'Sesuaikan dengan jenis alokasi SHU tambahan koperasi'
+                ],
+                sources: [
+                    'Keputusan RAT tentang alokasi SHU'
+                ],
+                tips: [
+                    'Pastikan sesuai dengan AD/ART koperasi',
+                    'Transparan dalam penentuan alokasi',
+                    'Dokumentasikan keputusan RAT'
+                ],
+                regulation: 'AD/ART Koperasi',
+                exampleNumbers: [500000, 1000000, 1500000, 2000000]
+            };
+            
+            alert(`Item alokasi SHU baru telah ditambahkan. Anda dapat mengedit namanya.`);
+        }
+        
+        // Fungsi untuk menghapus item
+        function removeItem(rowId) {
+            if (confirm('Apakah Anda yakin ingin menghapus item ini?')) {
+                const row = document.getElementById(rowId);
+                if (row) {
+                    row.remove();
+                    hitungTotal();
+                }
+            }
+        }
+        
+        // Fungsi untuk update nama item
+        function updateItemName(input) {
+            const itemId = input.getAttribute('data-id');
+            const newName = input.value;
+            
+            // Update info data jika ada
+            if (infoData[itemId]) {
+                infoData[itemId].title = newName;
+            }
+            
+            hitungTotal();
+        }
+        
         // Fungsi untuk menampilkan modal informasi
         function showInfoModal(infoId) {
             const info = infoData[infoId];
-            if (!info) return;
+            if (!info) {
+                alert('Informasi untuk item ini belum tersedia.');
+                return;
+            }
             
             // Set judul modal
             document.getElementById('modalTitle').textContent = info.title;
@@ -1476,9 +1951,12 @@
             document.querySelectorAll('.example-number').forEach(item => {
                 item.addEventListener('click', function() {
                     const value = this.getAttribute('data-value');
-                    document.getElementById(infoId).value = value;
-                    hitungTotal();
-                    alert(`Nilai ${formatRupiah(value)} telah dimasukkan ke ${info.title}`);
+                    const input = document.getElementById(infoId);
+                    if (input) {
+                        input.value = value;
+                        hitungTotal();
+                        alert(`Nilai ${formatRupiah(value)} telah dimasukkan ke ${info.title}`);
+                    }
                 });
             });
         }
@@ -1513,6 +1991,15 @@
         
         // Fungsi untuk menghitung SHU otomatis
         document.getElementById('calculate-shu-btn').addEventListener('click', hitungAlokasiSHU);
+        
+        // Fungsi untuk menambah item pendapatan
+        document.getElementById('add-pendapatan-btn').addEventListener('click', tambahItemPendapatan);
+        
+        // Fungsi untuk menambah item beban
+        document.getElementById('add-beban-btn').addEventListener('click', tambahItemBeban);
+        
+        // Fungsi untuk menambah item SHU
+        document.getElementById('add-shu-btn').addEventListener('click', tambahItemSHU);
         
         // Fungsi untuk menghapus data
         document.getElementById('clear-btn').addEventListener('click', function() {
@@ -1552,58 +2039,77 @@
                 [`LAPORAN LABA RUGI ${namaKoperasi.toUpperCase()}`],
                 [`Periode: Tahun ${periodeLaporan}`],
                 [`Satuan Mata Uang: ${satuanMataUang}`],
-                [],
-                ["Uraian", "Jumlah (Rp)"],
-                ["A. PENDAPATAN", ""],
-                ["  1. Pendapatan dari Anggota", parseFloat(document.getElementById('pendapatan-anggota').value) || 0],
-                ["  2. Pendapatan Operasional", parseFloat(document.getElementById('pendapatan-operasional').value) || 0],
-                ["  3. Pendapatan Non-Operasional", parseFloat(document.getElementById('pendapatan-non-operasional').value) || 0],
-                ["  4. Pendapatan Lain-lain", parseFloat(document.getElementById('pendapatan-lain').value) || 0],
-                ["  TOTAL PENDAPATAN", document.getElementById('total-pendapatan').textContent.replace(/\./g, '')],
-                [],
-                ["B. BEBAN", ""],
-                ["  1. Beban Operasional", parseFloat(document.getElementById('beban-operasional').value) || 0],
-                ["  2. Beban Administrasi dan Umum", parseFloat(document.getElementById('beban-administrasi').value) || 0],
-                ["  3. Beban Penyusutan", parseFloat(document.getElementById('beban-penyusutan').value) || 0],
-                ["  4. Beban Lain-lain", parseFloat(document.getElementById('beban-lain').value) || 0],
-                ["  TOTAL BEBAN", document.getElementById('total-beban').textContent.replace(/\./g, '')],
-                [],
-                ["C. LABA/RUGI SEBELUM SHU", ""],
-                ["  Laba/Rugi Sebelum SHU", document.getElementById('laba-rugi-sebelum-shu').textContent.replace(/\./g, '')],
-                ["  Sisa Hasil Usaha (SHU) yang Dibagikan", parseFloat(document.getElementById('shu-dibagikan').value) || 0],
-                ["  LABA/RUGI BERSIH", document.getElementById('laba-rugi-bersih').textContent.replace(/\./g, '')],
-                [],
-                ["D. ALOKASI SISA HASIL USAHA (SHU)", ""],
-                ["  1. Dana Modal/Simpanan (40%)", parseFloat(document.getElementById('dana-modal').value) || 0],
-                ["  2. Poin Belanja (5%)", parseFloat(document.getElementById('poin-belanja').value) || 0],
-                ["  3. Cadangan (20%)", parseFloat(document.getElementById('cadangan').value) || 0],
-                ["  4. Dana Pengurus (7%)", parseFloat(document.getElementById('dana-pengurus').value) || 0],
-                ["  5. Dana Pengawas (5%)", parseFloat(document.getElementById('dana-pengawas').value) || 0],
-                ["  6. Dana Karyawan (5%)", parseFloat(document.getElementById('dana-karyawan').value) || 0],
-                ["  7. Dana Sosial (5%)", parseFloat(document.getElementById('dana-sosial').value) || 0],
-                ["  8. Dana Pendidikan (3%)", parseFloat(document.getElementById('dana-pendidikan').value) || 0],
-                ["  9. Dana Pembangunan (10%)", parseFloat(document.getElementById('dana-pembangunan').value) || 0],
-                ["  TOTAL ALOKASI SHU", document.getElementById('total-alokasi-shu').textContent.replace(/\./g, '')],
-                [],
-                ["Catatan:", ""],
-                ["1. Format sesuai standar akuntansi koperasi Indonesia", ""],
-                ["2. Alokasi SHU sesuai dengan AD/ART Koperasi", ""],
-                ["3. Laporan harus ditandatangani oleh pengurus dan pengawas koperasi", ""],
-                ["", ""],
-                ["Disetujui oleh:", ""],
-                ["Ketua Pengurus", ""],
-                ["", ""],
-                ["(__________________________)", ""],
-                ["", ""],
-                ["Ketua Pengawas", ""],
-                ["", ""],
-                ["(__________________________)", ""],
-                ["", ""],
-                ["Mengetahui:", ""],
-                ["Sekretaris", ""],
-                ["", ""],
-                ["(__________________________)", ""]
+                []
             ];
+            
+            // Tambahkan pendapatan
+            data.push(["A. PENDAPATAN", ""]);
+            const pendapatanItems = document.querySelectorAll('#pendapatan-list .item-row');
+            pendapatanItems.forEach(row => {
+                const nameInput = row.querySelector('.item-name input[type="text"]');
+                const amountInput = row.querySelector('.item-amount input[type="number"]');
+                if (nameInput && amountInput) {
+                    data.push([`  ${nameInput.value}`, parseFloat(amountInput.value) || 0]);
+                }
+            });
+            data.push(["  TOTAL PENDAPATAN", document.getElementById('total-pendapatan').textContent.replace(/\./g, '')]);
+            data.push([]);
+            
+            // Tambahkan beban
+            data.push(["B. BEBAN", ""]);
+            const bebanItems = document.querySelectorAll('#beban-list .item-row');
+            bebanItems.forEach(row => {
+                const nameInput = row.querySelector('.item-name input[type="text"]');
+                const amountInput = row.querySelector('.item-amount input[type="number"]');
+                if (nameInput && amountInput) {
+                    data.push([`  ${nameInput.value}`, parseFloat(amountInput.value) || 0]);
+                }
+            });
+            data.push(["  TOTAL BEBAN", document.getElementById('total-beban').textContent.replace(/\./g, '')]);
+            data.push([]);
+            
+            // Tambahkan laba/rugi
+            data.push(["C. LABA/RUGI SEBELUM SHU", ""]);
+            data.push(["  Laba/Rugi Sebelum SHU", document.getElementById('laba-rugi-sebelum-shu').textContent.replace(/\./g, '')]);
+            
+            // SHU yang dibagikan
+            const shuDibagikanName = document.querySelector('[data-id="shu-dibagikan"]').value || 'Sisa Hasil Usaha (SHU) yang Dibagikan';
+            data.push([`  ${shuDibagikanName}`, parseFloat(document.getElementById('shu-dibagikan').value) || 0]);
+            data.push(["  LABA/RUGI BERSIH", document.getElementById('laba-rugi-bersih').textContent.replace(/\./g, '')]);
+            data.push([]);
+            
+            // Tambahkan alokasi SHU
+            data.push(["D. ALOKASI SISA HASIL USAHA (SHU)", ""]);
+            const shuItems = document.querySelectorAll('#shu-list .item-row');
+            shuItems.forEach(row => {
+                const nameInput = row.querySelector('.item-name input[type="text"]');
+                const amountInput = row.querySelector('.item-amount input[type="number"]');
+                if (nameInput && amountInput) {
+                    data.push([`  ${nameInput.value}`, parseFloat(amountInput.value) || 0]);
+                }
+            });
+            data.push(["  TOTAL ALOKASI SHU", document.getElementById('total-alokasi-shu').textContent.replace(/\./g, '')]);
+            data.push([]);
+            
+            // Tambahkan catatan
+            data.push(["Catatan:", ""]);
+            data.push(["1. Format sesuai standar akuntansi koperasi Indonesia", ""]);
+            data.push(["2. Alokasi SHU sesuai dengan AD/ART Koperasi", ""]);
+            data.push(["3. Laporan harus ditandatangani oleh pengurus dan pengawas koperasi", ""]);
+            data.push(["", ""]);
+            data.push(["Disetujui oleh:", ""]);
+            data.push(["Ketua Pengurus", ""]);
+            data.push(["", ""]);
+            data.push(["(__________________________)", ""]);
+            data.push(["", ""]);
+            data.push(["Ketua Pengawas", ""]);
+            data.push(["", ""]);
+            data.push(["(__________________________)", ""]);
+            data.push(["", ""]);
+            data.push(["Mengetahui:", ""]);
+            data.push(["Sekretaris", ""]);
+            data.push(["", ""]);
+            data.push(["(__________________________)", ""]);
             
             // Buat worksheet
             const ws = XLSX.utils.aoa_to_sheet(data);
@@ -1628,14 +2134,6 @@
             alert(`File ${fileName} berhasil diunduh.`);
         });
         
-        // Tambahkan event listener untuk ikon info
-        document.querySelectorAll('.info-icon').forEach(icon => {
-            icon.addEventListener('click', function() {
-                const infoId = this.getAttribute('data-info');
-                showInfoModal(infoId);
-            });
-        });
-        
         // Tutup modal ketika klik close button
         document.getElementById('closeModal').addEventListener('click', function() {
             document.getElementById('infoModal').style.display = 'none';
@@ -1655,18 +2153,10 @@
             }
         });
         
-        // Tambahkan event listener untuk menghitung otomatis saat input berubah
-        const allInputs = document.querySelectorAll('input[type="number"]');
-        allInputs.forEach(input => {
-            input.addEventListener('input', hitungTotal);
-        });
-        
         // Hitung total saat halaman pertama kali dimuat
         document.addEventListener('DOMContentLoaded', function() {
             hitungTotal();
-            // Tampilkan info persentase total
-            console.log(`Total persentase alokasi SHU: ${totalPercentage}%`);
         });
     </script>
 </body>
-</html>
+</html>.
